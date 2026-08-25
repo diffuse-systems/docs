@@ -1,0 +1,60 @@
+name: Publish
+
+# VitePress builds into .vitepress/dist and that directory is what goes online.
+# Note that public/ is copied into the build output verbatim, which is why the
+# CNAME lives in public/ and not at the repository root: a root CNAME would
+# never reach the artifact and the custom domain would drop on every deploy.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # The local search index and the "last updated" stamps read git
+          # history, so a shallow clone would quietly degrade both.
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      # base stays '/' because the site is served from the root of its own
+      # domain. DEPLOY_BASE exists only for a project-page preview.
+      - run: npm run build
+
+      - name: Check the build carries what the domain needs
+        run: |
+          test -f .vitepress/dist/CNAME
+          test -f .vitepress/dist/index.html
+          test -f .vitepress/dist/enterprise/why.html
+          grep -qx 'docs.diffuse-systems.com' .vitepress/dist/CNAME
+          # Artifact deployments do not run Jekyll, so this is belt and
+          # braces rather than a fix, and it costs nothing.
+          touch .vitepress/dist/.nojekyll
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .vitepress/dist
+      - id: deploy
+        uses: actions/deploy-pages@v4
