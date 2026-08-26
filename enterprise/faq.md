@@ -43,9 +43,25 @@ happens on the operator's side rather than on an application key.
 
 ## What happens when the licence expires?
 
-Enrolling a new machine is refused. Nothing that is running stops, no request is
-interrupted and no model is unloaded. Software that stops working when a
-purchase order is late is software an operations team learns to fear.
+The licence is a subscription, and it has a grace period.
+
+You are warned on every command and in the console for the thirty days before it
+expires. After the date, **everything still works for thirty more days** and the
+warning says when the service will stop — the failure this covers is a purchase
+order sitting in a purchasing department that closed for August, not an
+adversary.
+
+After the grace period the deployment stops serving: `/v1` refuses new requests,
+no new job is accepted, and no machine may be enrolled. Requests in flight
+finish and a training run that has started goes to its end — a three-day job
+killed on the calendar day is hostile and earns nothing.
+
+**Nothing you made is ever withheld.** Your trained adapters, your imported
+datasets and your audit trail stay readable and exportable whatever the licence
+says. The subscription bites on use, never on giving back what is yours.
+
+Installing a renewed licence restores everything immediately, with no restart of
+anything.
 
 ## Can we run it in a cloud?
 
