@@ -5,7 +5,10 @@ The commands, the endpoints, the error codes and the files.
 ## CLI
 
 Everything is `diffuse-coordinator <noun> <verb>`, and every noun removes with
-`rm`.
+`rm`. What follows is the shape of it; **[the complete reference](./reference/cli/index.md)**
+has a page for every command and subcommand, with every flag, its default, and a
+worked example — generated from the binary, so it cannot drift from what your
+terminal does.
 
 ### Setup
 

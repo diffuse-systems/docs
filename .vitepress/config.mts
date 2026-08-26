@@ -99,7 +99,12 @@ export default defineConfig({
         {
           text: 'Reference',
           items: [
-            { text: 'CLI, API and errors', link: '/enterprise/reference' },
+            { text: 'Overview', link: '/enterprise/reference' },
+            // Generated from the binary by `diffuse-coordinator docs` and
+            // copied here by `packaging/sync-cli-reference.sh`. A test in the
+            // product repository regenerates and diffs them, so editing a page
+            // here is editing something that will be overwritten.
+            { text: 'CLI, every command', link: '/enterprise/reference/cli/index' },
             { text: 'Glossary', link: '/enterprise/glossary' },
           ],
         },

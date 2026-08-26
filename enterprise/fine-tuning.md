@@ -2,6 +2,87 @@
 
 LoRA adapters trained on your own corpus, on the same cluster, in two commands.
 
+## The whole path, command by command
+
+Every step links to its reference page, which lists every flag that step takes.
+
+### 1. Get a base model onto the deployment
+
+```bash
+diffuse-coordinator model pull Qwen/Qwen2.5-3B-Instruct --as qwen2.5-3b
+```
+
+[`model pull`](./reference/cli/model-pull.md) fetches from the publisher.
+If the weights are already yours — an export, an audited directory — use
+[`model import`](./reference/cli/model-import.md) instead.
+[`model list`](./reference/cli/model-list.md) shows what the deployment holds.
+
+### 2. Import the corpus
+
+```bash
+diffuse-coordinator dataset import --from berichte.jsonl --as berichte
+```
+
+[`dataset import`](./reference/cli/dataset-import.md). The format is above.
+[`dataset list`](./reference/cli/dataset-list.md) confirms how many examples it
+read — check that number before spending a night on a run.
+
+### 3. Train
+
+The short path chooses the hyperparameters for you, from the corpus and the
+machine:
+
+```bash
+diffuse-coordinator finetune qwen2.5-3b --data berichte.jsonl --as berichte-v1
+```
+
+[`finetune`](./reference/cli/finetune.md). When you want to choose them
+yourself — rank, epochs, learning rate, which projections to adapt — use
+[`job create`](./reference/cli/job-create.md), which takes all of them.
+
+### 4. Watch it
+
+```bash
+diffuse-coordinator job watch 4f2a9c
+```
+
+[`job watch`](./reference/cli/job-watch.md) follows to the end and is safe to
+interrupt. [`job list`](./reference/cli/job-list.md) shows what is running,
+[`job get`](./reference/cli/job-get.md) shows one run's losses and machine, and
+[`job cancel`](./reference/cli/job-cancel.md) stops one.
+
+### 5. Find out whether it worked
+
+```bash
+diffuse-coordinator eval qwen2.5-3b --adapter berichte-v1 --suite berichte-test
+```
+
+[`eval`](./reference/cli/eval.md) scores the base and the fine-tune on the same
+suite, so what you read is a comparison. A run whose loss fell and whose
+evaluation did not is a run that memorised the corpus.
+
+### 6. Serve it
+
+```bash
+diffuse-coordinator model serve qwen2.5-3b+berichte-v1 --pool lab
+```
+
+[`model serve`](./reference/cli/model-serve.md) takes `<base>+<adapter>`. The
+endpoint then answers to that name like any other model.
+[`deployment list`](./reference/cli/deployment-list.md) shows where it landed.
+
+### 7. Keep it, or take it with you
+
+```bash
+diffuse-coordinator adapter list
+diffuse-coordinator adapter export berichte-v1 --to ./berichte-v1.tar.gz
+```
+
+[`adapter list`](./reference/cli/adapter-list.md) carries each adapter's
+provenance — base, rank, corpus size, final loss, the job that made it.
+[`adapter export`](./reference/cli/adapter-export.md) works whatever the licence
+says: the adapter is yours, trained on your corpus, on your machines.
+
 ## The corpus
 
 One JSON object per line. Each object has a `messages` array, and each message

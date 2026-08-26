@@ -2,6 +2,84 @@
 
 A large model teaches a small one. The corpus needs no answers in it.
 
+## The whole path, command by command
+
+Every step links to its reference page, which lists every flag that step takes.
+
+### 1. Serve the teacher
+
+The teacher has to be **running**: distillation asks it for its own answers.
+
+```bash
+diffuse-coordinator model pull Qwen/Qwen2.5-3B-Instruct --as qwen2.5-3b
+diffuse-coordinator model serve qwen2.5-3b --pool lab
+```
+
+[`model pull`](./reference/cli/model-pull.md),
+[`model serve`](./reference/cli/model-serve.md).
+
+### 2. Get the student onto the deployment
+
+It does **not** need serving — it is about to be trained.
+
+```bash
+diffuse-coordinator model pull Qwen/Qwen2.5-0.5B-Instruct --as qwen2.5-0.5b
+```
+
+### 3. Run it
+
+```bash
+diffuse-coordinator distill \
+  --teacher qwen2.5-3b \
+  --student qwen2.5-0.5b \
+  --data questions.jsonl \
+  --as berichte-klein
+```
+
+[`distill`](./reference/cli/distill.md) does both stages: it labels the corpus
+with the teacher's top-k distributions, then trains the student on them. The
+flags worth knowing before a long run are `--top-k`, `--temperature` and
+`--alpha`, and the reference page says what each one costs.
+
+### 4. Watch it
+
+```bash
+diffuse-coordinator job watch 7c31a8
+```
+
+[`job watch`](./reference/cli/job-watch.md). The labelling stage reports the
+**retained mass** — how much of the teacher's probability the top-k kept. If it
+is low, raise `--top-k`; the run says so rather than leaving you to work it out.
+
+### 5. If the training stage fails, do not label again
+
+```bash
+diffuse-coordinator distill --labelled-dataset berichte-labelled --student qwen2.5-0.5b --as berichte-klein
+```
+
+`--labelled-dataset` skips the teacher entirely. Labelling is the expensive
+half — hours of a served model's time — and this is what the refusal after a
+failed training stage tells you to run.
+
+### 6. Compare the two
+
+```bash
+diffuse-coordinator eval qwen2.5-0.5b --adapter berichte-klein --suite berichte-test
+```
+
+[`eval`](./reference/cli/eval.md). The question distillation answers is not
+"is the student as good as the teacher" — it will not be — but "is the student
+good enough on **this** work to be worth what it saves".
+
+### 7. Serve the student
+
+```bash
+diffuse-coordinator model serve qwen2.5-0.5b+berichte-klein --pool lab
+```
+
+[`model serve`](./reference/cli/model-serve.md). This is the point of the
+exercise: a model that fits on hardware the teacher never would.
+
 ## Why this rather than fine-tuning
 
 Fine-tuning teaches a model from answers you wrote. Distillation teaches it from
