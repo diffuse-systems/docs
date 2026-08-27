@@ -47,13 +47,13 @@ The licence is a subscription, and it has a grace period.
 
 You are warned on every command and in the console for the thirty days before it
 expires. After the date, **everything still works for thirty more days** and the
-warning says when the service will stop — the failure this covers is a purchase
+warning says when the service will stop: the failure this covers is a purchase
 order sitting in a purchasing department that closed for August, not an
 adversary.
 
 After the grace period the deployment stops serving: `/v1` refuses new requests,
 no new job is accepted, and no machine may be enrolled. Requests in flight
-finish and a training run that has started goes to its end — a three-day job
+finish and a training run that has started goes to its end: a three-day job
 killed on the calendar day is hostile and earns nothing.
 
 **Nothing you made is ever withheld.** Your trained adapters, your imported

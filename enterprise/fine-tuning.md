@@ -13,7 +13,7 @@ diffuse-coordinator model pull Qwen/Qwen2.5-3B-Instruct --as qwen2.5-3b
 ```
 
 [`model pull`](./reference/cli/model-pull.md) fetches from the publisher.
-If the weights are already yours — an export, an audited directory — use
+If the weights are already yours, an export, an audited directory, use
 [`model import`](./reference/cli/model-import.md) instead.
 [`model list`](./reference/cli/model-list.md) shows what the deployment holds.
 
@@ -25,7 +25,7 @@ diffuse-coordinator dataset import --from berichte.jsonl --as berichte
 
 [`dataset import`](./reference/cli/dataset-import.md). The format is above.
 [`dataset list`](./reference/cli/dataset-list.md) confirms how many examples it
-read — check that number before spending a night on a run.
+read: check that number before spending a night on a run.
 
 ### 3. Train
 
@@ -38,7 +38,7 @@ diffuse-coordinator finetune qwen2.5-3b berichte.jsonl
 
 [`finetune`](./reference/cli/finetune.md) takes the model and the file as
 positional arguments, and derives the adapter's name from the file. When you
-want to choose the hyperparameters yourself — rank, epochs, learning rate, which projections to adapt — use
+want to choose the hyperparameters yourself, rank, epochs, learning rate, which projections to adapt, use
 [`job create`](./reference/cli/job-create.md), which takes all of them.
 
 ### 4. Watch it
@@ -80,7 +80,7 @@ diffuse-coordinator adapter export berichte-v1 --to ./berichte-v1.tar.gz
 ```
 
 [`adapter list`](./reference/cli/adapter-list.md) carries each adapter's
-provenance — base, rank, corpus size, final loss, the job that made it.
+provenance: base, rank, corpus size, final loss, the job that made it.
 [`adapter export`](./reference/cli/adapter-export.md) works whatever the licence
 says: the adapter is yours, trained on your corpus, on your machines.
 

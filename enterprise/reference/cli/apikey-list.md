@@ -17,7 +17,7 @@ diffuse-coordinator apikey list [OPTIONS]
 | `--ca-cert` | `<CA_CERT>` | `$DIFFUSE_CA_CERT` | The deployment CA certificate (PEM) |
 | `--cert` | `<CERT>` | `$DIFFUSE_CERT` | This process's certificate chain (PEM) |
 | `--key` | `<KEY>` | `$DIFFUSE_KEY` | This process's private key (PEM) |
-| `--all` | flag | — | Include expired and revoked keys |
+| `--all` | flag | - | Include expired and revoked keys |
 | `--output` | `table` \| `json` | `table` | Output format |
 
 ## Examples
@@ -29,7 +29,7 @@ $ diffuse-coordinator apikey list
 ```
 HANDLE    STATE  NAME        EXPIRES               SCOPE                    OWNER      LAST USED             CREATED BY
 8QW2M4ZP  live   abrechnung  2026-11-24 09:20:00Z  every model              marie      2026-08-26 09:41:02Z  admin/local
-4KPFWJV8  live   portal      never                 gateway — acts as users  — unowned  2026-08-26 10:02:55Z  admin/local
+4KPFWJV8  live   portal      never                 gateway, acts as users  - unowned  2026-08-26 10:02:55Z  admin/local
 ```
 
 ---

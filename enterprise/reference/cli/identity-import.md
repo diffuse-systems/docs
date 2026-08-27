@@ -26,7 +26,7 @@ diffuse-coordinator identity import <FILE> [OPTIONS]
 
 ## Notes
 
-A CSV of `subject,address,models,pool`. `subject` is the stable identifier your chat interface knows a person by — not their address. An empty `models` column means every served model. Running it again updates people rather than duplicating them, and never re-enables somebody you disabled.
+A CSV of `subject,address,models,pool`. `subject` is the stable identifier your chat interface knows a person by, not their address. An empty `models` column means every served model. Running it again updates people rather than duplicating them, and never re-enables somebody you disabled.
 
 ## Examples
 

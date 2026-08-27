@@ -28,9 +28,9 @@ anything, so a wrong file cannot take a running deployment down.
 | | 30 days out | Expired, in grace | Past grace |
 |---|---|---|---|
 | Serving on `/v1` | works | works | refused |
-| Requests in flight | — | — | finish, never killed |
+| Requests in flight | - | - | finish, never killed |
 | New jobs | accepted | accepted | refused |
-| Jobs already running | — | — | run to completion |
+| Jobs already running | - | - | run to completion |
 | Enrolling a machine | works | works | refused |
 | Certificate renewal | works | works | **works** |
 | Administration commands | works, with a notice | works, with a notice | refused |
@@ -45,7 +45,7 @@ the adapters you trained on your own corpus, the datasets you imported, or the
 audit trail you may be required to produce.
 
 Two of those rows are deliberate rather than incidental. **Requests and jobs
-already running are never interrupted** — a three-day fine-tuning run killed on
+already running are never interrupted**: a three-day fine-tuning run killed on
 the calendar day is hostile and earns nothing. And **certificate renewal keeps
 working past grace**, because a node's identity lives ninety days and renews at
 sixty: if renewal stopped, a fleet would die of expired identities within a

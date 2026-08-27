@@ -46,8 +46,8 @@ Read it, then pipe it to bash.
 
 It installs to:
 
-- `~/.local/bin/diffuse` — the binary
-- `~/.diffuse/worker` — the Python worker and its virtual environment
+- `~/.local/bin/diffuse`, the binary
+- `~/.diffuse/worker`, the Python worker and its virtual environment
 
 If `~/.local/bin` is not on your `PATH`, add it:
 

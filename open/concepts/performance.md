@@ -37,7 +37,7 @@ ids come back. Seventy-four bytes in place of thirty-two kilobytes.
 
 ## Activations at half the width
 
-Hidden states travel in bfloat16 rather than float32 — the same precision the
+Hidden states travel in bfloat16 rather than float32: the same precision the
 model computes in, so nothing is lost by sending it. That halves every hop.
 
 A node that predates this is fed float32, because it would otherwise read half
@@ -99,7 +99,7 @@ accumulation, not from anything being wrong.
 
 **Guidance and sampling are done where the numbers are.** A model that asks for
 classifier-free guidance runs both branches, and the last slice combines them
-before anything is shortened — it is the only place holding both. Sampling
+before anything is shortened: it is the only place holding both. Sampling
 happens there too, over the whole distribution: drawing from a shortlist is not
 the same draw, because truncating moves the mass onto the strongest candidates
 and the answer comes out harder than the model meant it. Four token ids travel

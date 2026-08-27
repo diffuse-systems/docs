@@ -18,7 +18,7 @@ diffuse-coordinator adapter list [OPTIONS]
 | `--cert` | `<CERT>` | `$DIFFUSE_CERT` | This process's certificate chain (PEM) |
 | `--key` | `<KEY>` | `$DIFFUSE_KEY` | This process's private key (PEM) |
 | `--output` | `table` \| `json` | `table` | Output format |
-| `--json` | flag | — | The older spelling of `--output json` |
+| `--json` | flag | - | The older spelling of `--output json` |
 
 ## Examples
 

@@ -23,8 +23,8 @@ diffuse-coordinator eval <SUITE_KEY> [OPTIONS]
 | `--ca-cert` | `<CA_CERT>` | `$DIFFUSE_CA_CERT` | The deployment CA certificate (PEM) |
 | `--cert` | `<CERT>` | `$DIFFUSE_CERT` | This process's certificate chain (PEM) |
 | `--key` | `<KEY>` | `$DIFFUSE_KEY` | This process's private key (PEM) |
-| `--model` | `<MODEL>` | — | What to score: `<model>` or `<model>+<adapter>` |
-| `--pool` | `<POOL>` | — | Which pool to run it in |
+| `--model` | `<MODEL>` | - | What to score: `<model>` or `<model>+<adapter>` |
+| `--pool` | `<POOL>` | - | Which pool to run it in |
 | `--metric` | `<METRIC>` | `exact_match` | How a completion is compared: exact_match or contains |
 | `--max-tokens` | `<MAX_TOKENS>` | `32` | How far to generate before giving up on a row |
 

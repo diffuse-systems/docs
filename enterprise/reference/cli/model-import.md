@@ -17,12 +17,12 @@ diffuse-coordinator model import [OPTIONS]
 | `--ca-cert` | `<CA_CERT>` | `$DIFFUSE_CA_CERT` | The deployment CA certificate (PEM) |
 | `--cert` | `<CERT>` | `$DIFFUSE_CERT` | This process's certificate chain (PEM) |
 | `--key` | `<KEY>` | `$DIFFUSE_KEY` | This process's private key (PEM) |
-| `--from` | `<DIRECTORY>` | — | Directory holding config.json, the safetensors files and the tokenizer. Read by the coordinator, so the path is the coordinator's |
-| `--as` | `<MODEL_KEY>` | — | Slug to file it under. Derived from the directory name by default |
+| `--from` | `<DIRECTORY>` | - | Directory holding config.json, the safetensors files and the tokenizer. Read by the coordinator, so the path is the coordinator's |
+| `--as` | `<MODEL_KEY>` | - | Slug to file it under. Derived from the directory name by default |
 
 ## Notes
 
-For a model whose provenance you established yourself — an export from your own training, or a directory you audited. Takes safetensors or GGUF.
+For a model whose provenance you established yourself: an export from your own training, or a directory you audited. Takes safetensors or GGUF.
 
 ## Examples
 

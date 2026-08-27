@@ -54,7 +54,7 @@ message only, and is dropped once the answer arrives.
 
 The file never leaves your machine. It is read here, turned into hidden states
 by the part of the model that lives on your side, and only those activations
-travel — the same thing that would travel for a text prompt. See
+travel: the same thing that would travel for a text prompt. See
 [multimodal](/open/guides/multimodal) for which models accept what.
 
 If you attach something the model cannot read, the turn fails with a message

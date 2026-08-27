@@ -17,15 +17,15 @@ diffuse-coordinator dataset import [OPTIONS]
 | `--ca-cert` | `<CA_CERT>` | `$DIFFUSE_CA_CERT` | The deployment CA certificate (PEM) |
 | `--cert` | `<CERT>` | `$DIFFUSE_CERT` | This process's certificate chain (PEM) |
 | `--key` | `<KEY>` | `$DIFFUSE_KEY` | This process's private key (PEM) |
-| `--from` | `<PATH>` | — | The file, as a path on the coordinator |
-| `--as` | `<DATASET_KEY>` | — | Slug to file it under. Derived from the file name by default |
+| `--from` | `<PATH>` | - | The file, as a path on the coordinator |
+| `--as` | `<DATASET_KEY>` | - | Slug to file it under. Derived from the file name by default |
 | `--format` | `<FORMAT>` | `chat` | `chat` for training data, `eval` for a suite with expected answers |
-| `--classification` | `<CLASSIFICATION>` | — | **Required.** What this data is, in your organisation's own words |
+| `--classification` | `<CLASSIFICATION>` | - | **Required.** What this data is, in your organisation's own words |
 | `--retention-days` | `<RETENTION_DAYS>` | `0` | Delete it after this many days. Zero keeps it until removed |
 
 ## Notes
 
-JSONL, one example per line. The coordinator records what you declared it is — it does not inspect your data to guess.
+JSONL, one example per line. The coordinator records what you declared it is: it does not inspect your data to guess.
 
 ## Examples
 

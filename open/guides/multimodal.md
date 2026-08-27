@@ -71,8 +71,8 @@ complete list.
 
 Nowhere. That is the whole point, and it is worth being precise about.
 
-When you attach a file, your own machine runs the model's **encoder tower** —
-the vision or audio front end — and turns the picture or the recording into
+When you attach a file, your own machine runs the model's **encoder tower**,
+the vision or audio front end, and turns the picture or the recording into
 hidden states. Those are the same kind of numbers a text prompt produces after
 the first few layers. That is what crosses the network.
 
@@ -150,8 +150,8 @@ the picture is cut into patches rather than the answer into tokens. It is
 explained in [diffusion across nodes](/open/concepts/diffusion), and it is the same
 route an image or audio diffusion model takes.
 
-Image generation by *token* prediction — a model that emits image tokens the way
-MusicGen emits audio codes — is not verified. No such model small enough to test
+Image generation by *token* prediction, a model that emits image tokens the way
+MusicGen emits audio codes, is not verified. No such model small enough to test
 has been run. Do not assume it works until it appears in this table.
 
 ## Getting the extras
@@ -182,7 +182,7 @@ worker is an older build than the binary; see
 **A multimodal model gives the same answer whatever you ask it in text.** Your
 worker predates the fix for this. A multimodal checkpoint lays out a
 conversation as a list of parts; handed a plain string, its tokenizer's template
-does not fail, it writes an empty turn — so the model answers a question it
+does not fail, it writes an empty turn, so the model answers a question it
 never received. Update the worker, and read
 [troubleshooting](/open/troubleshooting#the-installed-worker-is-not-the-one-you-edited)
 if you are not sure which copy is running.

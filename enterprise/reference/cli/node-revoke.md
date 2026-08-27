@@ -23,7 +23,7 @@ diffuse-coordinator node revoke <NODE_ID> [OPTIONS]
 | `--ca-cert` | `<CA_CERT>` | `$DIFFUSE_CA_CERT` | The deployment CA certificate (PEM) |
 | `--cert` | `<CERT>` | `$DIFFUSE_CERT` | This process's certificate chain (PEM) |
 | `--key` | `<KEY>` | `$DIFFUSE_KEY` | This process's private key (PEM) |
-| `--reason` | `<REASON>` | `` | Why. Free text, shown in `node list-revoked` — this is the field that answers the question six months from now |
+| `--reason` | `<REASON>` | `` | Why. Free text, shown in `node list-revoked`: this is the field that answers the question six months from now |
 
 ## Notes
 

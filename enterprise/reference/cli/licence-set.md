@@ -22,9 +22,9 @@ diffuse-coordinator licence set <PATH> [OPTIONS]
 
 | flag | value | default | description |
 |---|---|---|---|
-| `--config` | `<CONFIG>` | — | The coordinator's configuration, read to find the console's port and the state directory. Defaults to the packaged one |
+| `--config` | `<CONFIG>` | - | The coordinator's configuration, read to find the console's port and the state directory. Defaults to the packaged one |
 | `--install-to` | `<INSTALL_TO>` | `/etc/diffuse/licence` | Where the coordinator reads its licence from |
-| `--no-restart` | flag | — | Install the file, but do not restart anything |
+| `--no-restart` | flag | - | Install the file, but do not restart anything |
 
 ## Notes
 

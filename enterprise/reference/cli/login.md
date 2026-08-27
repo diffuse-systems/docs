@@ -4,7 +4,7 @@ Sign in as a person, and keep the session on this machine.
 
 .
 
-From milestone 11 an administrator is an account, not a certificate. A certificate is still how a *service* — a configuration manager, a CI job — authenticates, and both are on the audit trail under their own name.
+From milestone 11 an administrator is an account, not a certificate. A certificate is still how a *service* authenticates, a configuration manager, a CI job, and both are on the audit trail under their own name.
 
 ## Synopsis
 
@@ -17,11 +17,11 @@ diffuse-coordinator login [OPTIONS]
 | flag | value | default | description |
 |---|---|---|---|
 | `--endpoint` | `<ENDPOINT>` | `$DIFFUSE_OPERATOR_ENDPOINT` | The operator plane, e.g. https://coordinator.internal:7446 |
-| `--ca` | `<CA>` | — | The certificate authority that signed the coordinator's certificate |
-| `--login` | `<LOGIN>` | — | The login. Prompted for when absent |
+| `--ca` | `<CA>` | - | The certificate authority that signed the coordinator's certificate |
+| `--login` | `<LOGIN>` | - | The login. Prompted for when absent |
 | `--password` | `<PASSWORD>` | `$DIFFUSE_PASSWORD` | The password |
-| `--sso` | flag | — | Sign in through this deployment's identity provider instead |
-| `--no-browser` | flag | — | Print the sign-in URL rather than opening a browser |
+| `--sso` | flag | - | Sign in through this deployment's identity provider instead |
+| `--no-browser` | flag | - | Print the sign-in URL rather than opening a browser |
 
 ## Notes
 

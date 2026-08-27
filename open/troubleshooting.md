@@ -91,8 +91,8 @@ already fixed, such as `'Idefics3Config' object has no attribute 'n_layer'`.
 Diffuse looks for the worker in this order:
 
 1. `$DIFFUSE_WORKER_DIR`
-2. `~/.diffuse/worker` — where the installer puts it
-3. `./worker` — the copy in a checkout
+2. `~/.diffuse/worker`, where the installer puts it
+3. `./worker`: the copy in a checkout
 
 **The installed copy wins over your checkout.** If you installed Diffuse and
 then cloned the repository to work on it, `diffuse host` runs the installed
@@ -122,7 +122,7 @@ Symptoms: you restart a worker after a code change, and the old behaviour
 persists.
 
 A worker that fails to bind because the port is taken exits quietly, and the
-daemon connects to whatever is already there — which may be an older process.
+daemon connects to whatever is already there, which may be an older process.
 Check and clear before restarting:
 
 ```bash
@@ -194,7 +194,7 @@ Symptoms: `end_layer 32 exceeds total 28`.
 The capacity planner counted an encoder's blocks as decoder layers. This is
 fixed for the models in [model support](/open/concepts/model-support); if you hit it
 on a new architecture, it means the encoder is named in a way the rule does not
-recognise. Report the model id — the fix is one line, and it belongs in the
+recognise. Report the model id: the fix is one line, and it belongs in the
 rule rather than in a list.
 
 ## An answer that is right for the wrong reason
@@ -203,7 +203,7 @@ Not an error, but worth knowing before you trust a result.
 
 Small models often cannot read what you think you are asking about. Asked which
 direction a shape moves in a video, a 2B vision model answered "right" for a
-shape moving right — and gave the same answer for the mirrored clip. The model
+shape moving right, and gave the same answer for the mirrored clip. The model
 running whole, with no Diffuse involved, did the same.
 
 Before concluding that Diffuse changed an answer, run the model whole on one

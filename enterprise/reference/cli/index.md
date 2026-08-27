@@ -1,6 +1,6 @@
 # CLI reference
 
-Every command of `diffuse-coordinator`, generated from the binary itself. If a page here disagrees with what your terminal prints, the page is a bug — a test regenerates all of this and fails on any difference.
+Every command of `diffuse-coordinator`, generated from the binary itself. If a page here disagrees with what your terminal prints, the page is a bug: a test regenerates all of this and fails on any difference.
 
 ## [`init`](init.md)
 
@@ -75,7 +75,7 @@ Acquire, inspect and place models
 |---|---|
 | [`model import`](model-import.md) | Ingest a model from a directory. The path for a coordinator with no internet route, which is most of them in a regulated deployment |
 | [`model pull`](model-pull.md) | Fetch a model: a name from the catalogue, or a repository on a hub |
-| [`model run`](model-run.md) | Fetch a model and serve it — the two commands most people want as one |
+| [`model run`](model-run.md) | Fetch a model and serve it: the two commands most people want as one |
 | [`model list`](model-list.md) | List acquired models and their provenance |
 | [`model rm`](model-rm.md) | Remove a model and its index |
 | [`model serve`](model-serve.md) | Place a model on the nodes of a pool |

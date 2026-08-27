@@ -17,9 +17,9 @@ diffuse-coordinator token create [OPTIONS]
 | `--ca-cert` | `<CA_CERT>` | `$DIFFUSE_CA_CERT` | The deployment CA certificate (PEM) |
 | `--cert` | `<CERT>` | `$DIFFUSE_CERT` | This process's certificate chain (PEM) |
 | `--key` | `<KEY>` | `$DIFFUSE_KEY` | This process's private key (PEM) |
-| `--pool` | `<POOL>` | — | Scheduling pool the enrolled machines join |
-| `--labels` | `<LABELS>` | — | Labels, written key=value,key=value |
-| `--schedule` | `<SCHEDULE>` | — | When the machines declare themselves available, e.g. "Mo-Fr 19:00-07:00". Recorded and displayed; nothing enforces it yet |
+| `--pool` | `<POOL>` | - | Scheduling pool the enrolled machines join |
+| `--labels` | `<LABELS>` | - | Labels, written key=value,key=value |
+| `--schedule` | `<SCHEDULE>` | - | When the machines declare themselves available, e.g. "Mo-Fr 19:00-07:00". Recorded and displayed; nothing enforces it yet |
 | `--max-uses` | `<MAX_USES>` | `1` | How many machines may enrol with this token |
 | `--ttl` | `<TTL>` | `1h` | How long the token lives, e.g. 1h, 48h, 7d |
 

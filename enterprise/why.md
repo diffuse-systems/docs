@@ -169,8 +169,8 @@ an entire organisation, with no split at all.
 Worth stating plainly, because the splitting story can leave the impression that
 this product is for people without capable hardware. **Splitting is the fallback
 for machines that cannot hold a model; it is never the requirement.** On one such
-box the coordinator places the model whole, and everything else — the identities,
-the roles, the trail, the entitlement, the endpoint — is identical.
+box the coordinator places the model whole, and everything else, the identities,
+the roles, the trail, the entitlement, the endpoint, is identical.
 
 The same is true of a data-centre accelerator, and of a server with enough
 system memory. The question placement asks is only ever whether the model fits.

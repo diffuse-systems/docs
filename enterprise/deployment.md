@@ -6,8 +6,8 @@ need them.
 ## Before you start: Debian 12
 
 **The machines that compute must run Debian 12 (bookworm).** The node-agent
-package requires python3 3.11 exactly — its ML wheels are built against that
-ABI — so `apt` refuses it on Debian 13, Ubuntu 22.04 and Ubuntu 24.04. The
+package requires python3 3.11 exactly, its ML wheels are built against that
+ABI, so `apt` refuses it on Debian 13, Ubuntu 22.04 and Ubuntu 24.04. The
 coordinator is less fussy, but a deployment needs agents.
 
 [Limitations](./limitations.md) has the detail and the fix that would lift it.
@@ -142,7 +142,7 @@ mutually authenticated TLS over the loopback.
 The intended case rather than an afterthought.
 
 The offline bundle is a tar archive containing both packages, the documents and
-the digests — about 275 MB. It contains no script: everything is installed by
+the digests: about 275 MB. It contains no script: everything is installed by
 the package manager, and the packages carry both inference backends with every
 dependency they import. Nothing is fetched at install time and nothing is
 fetched when a node is given a model.
@@ -242,7 +242,7 @@ diffuse-coordinator nodes
 ```
 NODE     POOL  HEALTH   CORES  RAM       ACCELERATOR  LAST SEEN  LICENSED
 node-01  lab   healthy  16     62.7 GiB  RTX 4090     1.2s       yes
-node-02  lab   healthy  8      15.5 GiB  —            0.9s       yes
+node-02  lab   healthy  8      15.5 GiB  -            0.9s       yes
 ```
 
 The nodes need nothing. Their identities were issued by the authority you have

@@ -1,6 +1,6 @@
 # `diffuse-coordinator model run`
 
-Fetch a model and serve it — the two commands most people want as one.
+Fetch a model and serve it: the two commands most people want as one.
 
 .
 
@@ -27,12 +27,12 @@ diffuse-coordinator model run <REFERENCE> [OPTIONS]
 | `--ca-cert` | `<CA_CERT>` | `$DIFFUSE_CA_CERT` | The deployment CA certificate (PEM) |
 | `--cert` | `<CERT>` | `$DIFFUSE_CERT` | This process's certificate chain (PEM) |
 | `--key` | `<KEY>` | `$DIFFUSE_KEY` | This process's private key (PEM) |
-| `--quantization` | `<QUANTIZATION>` | — | Which quantisation to take, when a repository publishes several |
-| `--pool` | `<POOL>` | — | Which pool to draw nodes from. Every healthy node by default |
+| `--quantization` | `<QUANTIZATION>` | - | Which quantisation to take, when a repository publishes several |
+| `--pool` | `<POOL>` | - | Which pool to draw nodes from. Every healthy node by default |
 | `--nodes` | `<NODES>` | `0` | How many nodes to split across, when splitting is the answer |
 | `--context` | `<CONTEXT>` | `0` | Context the memory estimate is made against |
-| `--allow-split` | flag | — | Permit the pipeline fallback when no single machine holds the model |
-| `--no-precheck` | flag | — | Fetch without checking first whether it fits and whether something else is served |
+| `--allow-split` | flag | - | Permit the pipeline fallback when no single machine holds the model |
+| `--no-precheck` | flag | - | Fetch without checking first whether it fits and whether something else is served |
 
 ## Notes
 

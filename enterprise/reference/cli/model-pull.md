@@ -23,10 +23,10 @@ diffuse-coordinator model pull <REFERENCE> [OPTIONS]
 | `--ca-cert` | `<CA_CERT>` | `$DIFFUSE_CA_CERT` | The deployment CA certificate (PEM) |
 | `--cert` | `<CERT>` | `$DIFFUSE_CERT` | This process's certificate chain (PEM) |
 | `--key` | `<KEY>` | `$DIFFUSE_KEY` | This process's private key (PEM) |
-| `--revision` | `<REVISION>` | — | Branch, tag or commit. Resolved to a commit and recorded as one |
-| `--as` | `<MODEL_KEY>` | — | Slug to file it under. Derived from the reference by default |
-| `--quantization` | `<QUANTIZATION>` | — | Which quantisation to take, when a repository publishes several |
-| `--no-precheck` | flag | — | Fetch even when no machine here has the memory to serve the result |
+| `--revision` | `<REVISION>` | - | Branch, tag or commit. Resolved to a commit and recorded as one |
+| `--as` | `<MODEL_KEY>` | - | Slug to file it under. Derived from the reference by default |
+| `--quantization` | `<QUANTIZATION>` | - | Which quantisation to take, when a repository publishes several |
+| `--no-precheck` | flag | - | Fetch even when no machine here has the memory to serve the result |
 
 ## Notes
 

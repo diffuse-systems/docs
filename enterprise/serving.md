@@ -149,7 +149,7 @@ diffuse-coordinator nodes --wide
 ```
 NODE     POOL  HEALTH   RAM       DEVICE      SLICE   TOK/S  FWD P50  EXPIRES
 node-01  lab   healthy  62.7 GiB  cuda:0      0..36    41.2    18ms      89d
-node-02  lab   healthy  15.5 GiB  cpu (idle)  —           —       —      89d
+node-02  lab   healthy  15.5 GiB  cpu (idle)  -           -       -      89d
 
 node-02 FAILED
   the fast backend needs a dependency this machine does not have: No module

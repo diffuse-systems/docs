@@ -17,7 +17,7 @@ diffuse-coordinator model list [OPTIONS]
 | `--ca-cert` | `<CA_CERT>` | `$DIFFUSE_CA_CERT` | The deployment CA certificate (PEM) |
 | `--cert` | `<CERT>` | `$DIFFUSE_CERT` | This process's certificate chain (PEM) |
 | `--key` | `<KEY>` | `$DIFFUSE_KEY` | This process's private key (PEM) |
-| `--available` | flag | — | Show what this build can fetch by name, rather than what is installed |
+| `--available` | flag | - | Show what this build can fetch by name, rather than what is installed |
 | `--output` | `table` \| `json` | `table` | Output format |
 
 ## Examples
@@ -28,8 +28,8 @@ $ diffuse-coordinator model list
 
 ```
 MODEL       ARCH   FORMAT       QUANT  BACKEND    SPLIT           LAYERS  SIZE       LICENCE
-allgemein   llama  safetensors  —      reference  layer_pipeline  30      269.0 MiB  apache-2.0
-qwen2.5-3b  qwen2  safetensors  —      reference  layer_pipeline  36      6.2 GiB    apache-2.0
+allgemein   llama  safetensors  -      reference  layer_pipeline  30      269.0 MiB  apache-2.0
+qwen2.5-3b  qwen2  safetensors  -      reference  layer_pipeline  36      6.2 GiB    apache-2.0
 ```
 
 ---

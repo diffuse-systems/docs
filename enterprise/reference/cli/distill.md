@@ -23,16 +23,16 @@ diffuse-coordinator distill <CORPUS> [OPTIONS]
 | `--ca-cert` | `<CA_CERT>` | `$DIFFUSE_CA_CERT` | The deployment CA certificate (PEM) |
 | `--cert` | `<CERT>` | `$DIFFUSE_CERT` | This process's certificate chain (PEM) |
 | `--key` | `<KEY>` | `$DIFFUSE_KEY` | This process's private key (PEM) |
-| `--teacher` | `<TEACHER>` | — | The model whose behaviour is being copied |
-| `--student` | `<STUDENT>` | — | The model that will learn it |
+| `--teacher` | `<TEACHER>` | - | The model whose behaviour is being copied |
+| `--student` | `<STUDENT>` | - | The model that will learn it |
 | `--classification` | `<CLASSIFICATION>` | `internal` | What the corpus is, in your organisation's own words |
-| `--eval-suite` | `<EVAL_SUITE>` | — | The suite the teacher and the student are both scored on |
-| `--pool` | `<POOL>` | — | Which pool does the work. Any pool when omitted |
-| `--as` | `<ADAPTER_KEY>` | — | What to call the student. Derived when empty |
+| `--eval-suite` | `<EVAL_SUITE>` | - | The suite the teacher and the student are both scored on |
+| `--pool` | `<POOL>` | - | Which pool does the work. Any pool when omitted |
+| `--as` | `<ADAPTER_KEY>` | - | What to call the student. Derived when empty |
 | `--top-k` | `<TOP_K>` | `64` | How many of the teacher's logits to keep per position |
 | `--temperature` | `<TEMPERATURE>` | `1` | Distillation temperature |
 | `--alpha` | `<ALPHA>` | `0.9` | Weight of the soft-label term against the hard-label one |
-| `--labelled-dataset` | `<LABELLED_DATASET>` | — | Skip the teacher and train on a corpus that was already labelled |
+| `--labelled-dataset` | `<LABELLED_DATASET>` | - | Skip the teacher and train on a corpus that was already labelled |
 | `--batch` | `<BATCH>` | `1` | Examples per optimiser step. Raise it while the machine has memory spare; a larger batch is steadier and finishes sooner |
 | `--max-seq-len` | `<MAX_SEQ_LEN>` | `512` | Tokens per example. Anything longer is truncated, so set this to the length your corpus actually needs rather than to the model's maximum |
 | `--epochs` | `<EPOCHS>` | `1` | Passes over the corpus. One is usually right for distillation: the soft labels carry far more signal per example than hard ones |
@@ -41,7 +41,7 @@ diffuse-coordinator distill <CORPUS> [OPTIONS]
 
 ## Notes
 
-Teacher and student in one command: the teacher **scores the answers your corpus already has**, position by position, and the student trains on those scores. It does not write answers — a corpus of questions alone is refused, naming the first line that is short. The teacher must be served; the student need not be.
+Teacher and student in one command: the teacher **scores the answers your corpus already has**, position by position, and the student trains on those scores. It does not write answers: a corpus of questions alone is refused, naming the first line that is short. The teacher must be served; the student need not be.
 
 ## Examples
 

@@ -18,7 +18,7 @@ ranges and hands each range to a different machine.
 1. **Tokenize locally.** Your machine turns your text into token ids using the
    model's tokenizer. This happens on your device. If you attached a picture or
    a recording, your machine also runs the model's encoder and turns it into
-   hidden states — the media itself never leaves.
+   hidden states: the media itself never leaves.
 2. **Enter the pipeline.** The request goes, encrypted, to the node holding the
    first slice, carrying the route for the rest. That node embeds the tokens and
    runs its layers.
@@ -27,7 +27,7 @@ ranges and hands each range to a different machine.
    chain. Only the first and last trips touch your connection, whatever the
    number of nodes.
 4. **Return the best candidates.** The last slice does not send back a score for
-   every word it knows — that would be hundreds of kilobytes per token. It sends
+   every word it knows: that would be hundreds of kilobytes per token. It sends
    the few best, which is all your machine reads.
 5. **Decode and repeat.** Your machine picks the next token and feeds it back
    until the answer is complete.

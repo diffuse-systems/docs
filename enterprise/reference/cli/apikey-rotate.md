@@ -38,7 +38,7 @@ $ diffuse-coordinator apikey rotate 4KPFWJV8 --overlap 24h
 ```
 API key 9SRHEWM5 created; it replaces 4KPFWJV8.
   same name, same scope, same rights: a rotation changes the secret and nothing else.
-  4KPFWJV8 keeps working until 2026-08-27 10:30:00Z — move your integration over
+  4KPFWJV8 keeps working until 2026-08-27 10:30:00Z, move your integration over
   before then, and it never sees an outage.
 
 dfe_sk_9SRHEWM5P8P5Q881DM2MBK8B6MCGWBHC2DM3Y

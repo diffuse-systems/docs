@@ -23,7 +23,7 @@ diffuse-coordinator account create <LOGIN> [OPTIONS]
 | `--ca-cert` | `<CA_CERT>` | `$DIFFUSE_CA_CERT` | The deployment CA certificate (PEM) |
 | `--cert` | `<CERT>` | `$DIFFUSE_CERT` | This process's certificate chain (PEM) |
 | `--key` | `<KEY>` | `$DIFFUSE_KEY` | This process's private key (PEM) |
-| `--name` | `<NAME>` | — | The person's name, for a table an operator reads |
+| `--name` | `<NAME>` | - | The person's name, for a table an operator reads |
 | `--role` | `<ROLE>` | `developer` | owner, admin, operator, developer or auditor |
 
 ## Notes

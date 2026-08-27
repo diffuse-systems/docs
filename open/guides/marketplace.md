@@ -45,7 +45,7 @@ Each row is judged against the machine you are on.
 | `as a slice` | cyan | too big alone, but you can hold part of it |
 | `cannot run` | coral | this machine cannot hold even one layer, or Diffuse cannot split it |
 
-The column after that lists what the model **reads** beyond text — `image`,
+The column after that lists what the model **reads** beyond text: `image`,
 `audio`, `video`, or a combination. A `gated` marker means the repository needs
 you to accept a licence.
 

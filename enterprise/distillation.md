@@ -20,7 +20,7 @@ diffuse-coordinator model serve qwen2.5-3b --pool lab
 
 ### 2. Get the student onto the deployment
 
-It does **not** need serving — it is about to be trained.
+It does **not** need serving: it is about to be trained.
 
 ```bash
 diffuse-coordinator model pull Qwen/Qwen2.5-0.5B-Instruct --as qwen2.5-0.5b
@@ -48,7 +48,7 @@ diffuse-coordinator job watch 7c31a8
 ```
 
 [`job watch`](./reference/cli/job-watch.md). The labelling stage reports the
-**retained mass** — how much of the teacher's probability the top-k kept. If it
+**retained mass**: how much of the teacher's probability the top-k kept. If it
 is low, raise `--top-k`; the run says so rather than leaving you to work it out.
 
 ### 5. If the training stage fails, do not label again
@@ -59,7 +59,7 @@ diffuse-coordinator distill --labelled-dataset berichte-labelled \\
 ```
 
 `--labelled-dataset` skips the teacher entirely. Labelling is the expensive
-half — hours of a served model's time — and this is what the refusal after a
+half, hours of a served model's time, and this is what the refusal after a
 failed training stage tells you to run.
 
 ### 6. Compare the two
@@ -69,7 +69,7 @@ diffuse-coordinator eval qwen2.5-0.5b --adapter berichte-klein --suite berichte-
 ```
 
 [`eval`](./reference/cli/eval.md). The question distillation answers is not
-"is the student as good as the teacher" — it will not be — but "is the student
+"is the student as good as the teacher", it will not be, but "is the student
 good enough on **this** work to be worth what it saves".
 
 ### 7. Serve the student
@@ -99,7 +99,7 @@ loudly because it decides how much work you do:
 *scores* the ones you supply, position by position, and turns those scores into
 the soft labels the student learns from. A line that stops after the question
 has nothing to score, and the run refuses the corpus rather than training on
-half of it — naming the first line that is short.
+half of it: naming the first line that is short.
 
 ```json
 {"messages":[{"role":"user","content":"Welche Fristen gelten für einen Widerspruch?"},{"role":"assistant","content":"Ein Monat ab Zugang des Bescheids."}]}
@@ -107,7 +107,7 @@ half of it — naming the first line that is short.
 ```
 
 So the corpus is the same shape as a fine-tuning corpus. What distillation saves
-you is not the writing — it is a **small model that behaves like a large one on
+you is not the writing: it is a **small model that behaves like a large one on
 this corpus**, on hardware the large one would not fit. That is a different
 economy from fine-tuning, and it is the one worth reaching for when the model
 you want to run is smaller than the model that answers well.

@@ -17,7 +17,7 @@ diffuse-coordinator token list [OPTIONS]
 | `--ca-cert` | `<CA_CERT>` | `$DIFFUSE_CA_CERT` | The deployment CA certificate (PEM) |
 | `--cert` | `<CERT>` | `$DIFFUSE_CERT` | This process's certificate chain (PEM) |
 | `--key` | `<KEY>` | `$DIFFUSE_KEY` | This process's private key (PEM) |
-| `--all` | flag | — | Include spent, expired and revoked tokens |
+| `--all` | flag | - | Include spent, expired and revoked tokens |
 | `--output` | `table` \| `json` | `table` | Output format |
 
 ## Examples

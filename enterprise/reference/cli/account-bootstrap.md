@@ -16,8 +16,8 @@ diffuse-coordinator account bootstrap [OPTIONS]
 |---|---|---|---|
 | `--state-dir` | `<STATE_DIR>` | `$DIFFUSE_STATE_DIR` | The coordinator's state directory |
 | `--config` | `<CONFIG>` | `$DIFFUSE_COORDINATOR_CONFIG` | Configuration file, read only for its `state_dir` |
-| `--login` | `<LOGIN>` | — | The login of the first owner |
-| `--name` | `<NAME>` | — | Their name |
+| `--login` | `<LOGIN>` | - | The login of the first owner |
+| `--name` | `<NAME>` | - | Their name |
 
 ## Notes
 

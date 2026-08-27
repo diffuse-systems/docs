@@ -48,7 +48,7 @@ not built. Audio and video are long-term scope and nothing more.
 
 ## Debian 12 only, today
 
-Not "Debian and Ubuntu", and not "12 and newer" — **Debian 12 (bookworm),
+Not "Debian and Ubuntu", and not "12 and newer": **Debian 12 (bookworm),
 exactly**, on every machine that runs a node agent.
 
 The agent package declares `python3 (>= 3.11), python3 (<< 3.12)`, because its

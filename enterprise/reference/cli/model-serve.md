@@ -27,10 +27,10 @@ diffuse-coordinator model serve <MODEL_KEY> [OPTIONS]
 | `--ca-cert` | `<CA_CERT>` | `$DIFFUSE_CA_CERT` | The deployment CA certificate (PEM) |
 | `--cert` | `<CERT>` | `$DIFFUSE_CERT` | This process's certificate chain (PEM) |
 | `--key` | `<KEY>` | `$DIFFUSE_KEY` | This process's private key (PEM) |
-| `--pool` | `<POOL>` | — | Which pool to draw nodes from. Every healthy node by default |
+| `--pool` | `<POOL>` | - | Which pool to draw nodes from. Every healthy node by default |
 | `--nodes` | `<NODES>` | `0` | How many nodes to split across, when splitting is the answer |
 | `--context` | `<CONTEXT>` | `0` | Context the memory estimate is made against |
-| `--allow-split` | flag | — | Permit the pipeline fallback when no single machine holds the model |
+| `--allow-split` | flag | - | Permit the pipeline fallback when no single machine holds the model |
 
 ## Notes
 
@@ -48,7 +48,7 @@ planning across pool lab
   ready in 41s
 
 qwen2.5-3b is served. Give developers /etc/diffuse/ca.crt and any OpenAI client
-works unchanged against https://coordinator.internal:8443/v1 — see API.md.
+works unchanged against https://coordinator.internal:8443/v1, see API.md.
 ```
 
 ---

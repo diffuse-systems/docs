@@ -14,7 +14,7 @@ diffuse-coordinator account recover [OPTIONS]
 |---|---|---|---|
 | `--state-dir` | `<STATE_DIR>` | `$DIFFUSE_STATE_DIR` | The coordinator's state directory |
 | `--config` | `<CONFIG>` | `$DIFFUSE_COORDINATOR_CONFIG` | Configuration file, read only for its `state_dir` |
-| `--login` | `<LOGIN>` | — | Whose password to reset |
+| `--login` | `<LOGIN>` | - | Whose password to reset |
 
 ## Notes
 

@@ -1,7 +1,7 @@
 # Diffusion across nodes
 
-A chat model and a diffusion model look alike from a distance — both are a
-stack of near-identical transformer blocks — and splitting them across machines
+A chat model and a diffusion model look alike from a distance, both are a
+stack of near-identical transformer blocks, and splitting them across machines
 could not be more different. This page explains why, and what Diffuse does
 instead.
 
@@ -15,7 +15,7 @@ Diffusion has nothing to fill it with. One picture is twenty to fifty passes
 through the entire stack, and pass seventeen cannot begin until pass sixteen has
 finished, because it denoises what sixteen produced. Cut the blocks across four
 machines and three of them are idle at any moment, waiting their turn. Worse,
-what moves between the stages is the whole latent — for video, tens of megabytes
+what moves between the stages is the whole latent: for video, tens of megabytes
 per pass.
 
 So the obvious split gives you a pipeline that is three-quarters empty and
@@ -26,7 +26,7 @@ shape of the computation.
 
 The picture is cut into **patches**, and the patches move through the stages.
 While stage two works on patch A, stage one works on patch B. The pipeline fills
-up again — not with future tokens, which do not exist, but with pieces of the
+up again, not with future tokens, which do not exist, but with pieces of the
 same picture.
 
 One difficulty remains, and it is the whole trick. Attention over a patch needs
@@ -34,7 +34,7 @@ the rest of the picture: patch B has to know what patch A looks like at this
 stage. Waiting for it would put the idle stages straight back.
 
 **So each stage answers with what it saw one denoising step ago.** Between two
-consecutive steps a latent barely moves — that is what denoising means, small
+consecutive steps a latent barely moves: that is what denoising means, small
 corrections to something already nearly right. A stage attends over the previous
 step's picture for the patches it has not been given yet, and over this step's
 values for the ones it has.
@@ -54,13 +54,13 @@ against the same model run whole on one machine:
 
 | Patches per step | Difference from the whole model |
 |---|---|
-| 1 | **none — bit-identical** |
+| 1 | **none - bit-identical** |
 | 2 | mean **36.5 / 255** |
 | 4 | mean **52.8 / 255** |
 
 Read the first row first: with a single patch there is no stale data to use, and
 the answer is **byte-for-byte** what the unsliced model produced. That is the row
-that says the machinery is right rather than merely plausible — the slicing, the
+that says the machinery is right rather than merely plausible: the slicing, the
 plan that carries the call, the client-side ends, the encryption, all of it. A
 model cut across machines costs nothing in fidelity.
 
@@ -72,7 +72,7 @@ warmer and more saturated, the soft shading on the paper hardens, and the
 reflection in the water changes character. The prompt is followed just as well;
 the picture is graded differently.
 
-So the honest summary is a visible quality cost, not a failure — but a cost you
+So the honest summary is a visible quality cost, not a failure, but a cost you
 should choose deliberately, which is why `--patches` defaults to **1**. Twenty
 steps is barely better than six (66 / 255 at four patches), so denoising longer
 does not buy it back.
@@ -123,7 +123,7 @@ mechanism finds what it needs by shape:
   model exposes. Note the plural: Flux and HunyuanVideo run a joint stack and
   then a single-stream stack, and both are split.
 - **How long each stack is** comes from the model's own config, but the config
-  does not say which setting governs which stack — `num_layers`,
+  does not say which setting governs which stack: `num_layers`,
   `num_single_layers`, `depth`, and the names differ per family. Each integer
   setting is nudged by one on a weightless copy of the model and the stack that
   grew is the one it controls. Nothing to keep up to date.
@@ -141,7 +141,7 @@ mechanism finds what it needs by shape:
 This is where being generic is actually hard. Diffusers calls its blocks in
 whichever style the family was written in: Wan passes everything positionally,
 Flux, SD3, LTX and Mochi pass by keyword, and the arguments are not all tensors
-— there are floats, integers and dictionaries in there.
+: there are floats, integers and dictionaries in there.
 
 So a call is taken apart into a **plan**: which positions and which names it
 carried, which of them were tensors, and which small constants sit between them.
@@ -149,7 +149,7 @@ The plan travels as JSON with the first call of each branch and is remembered by
 the node; only tensors that changed are sent again.
 
 The other half is subtler. A block returns one tensor for some families and two
-for others — Flux, SD3, CogVideoX, Mochi and HunyuanVideo carry an image stream
+for others, Flux, SD3, CogVideoX, Mochi and HunyuanVideo carry an image stream
 and a text stream side by side through their blocks, and the order they come
 back in differs between them. Nothing declares this. It is learned instead: one
 block is run once, locally, and each tensor it returned is matched to the input
@@ -160,7 +160,7 @@ its loop.
 A model that carries two streams through its blocks is not cut into patches:
 splitting the image stream would give each patch its own version of the text
 stream, and there is only one right answer. Those models are still split across
-nodes block by block, which is exact — the step simply stays whole. The node
+nodes block by block, which is exact: the step simply stays whole. The node
 says so when the generation starts and the client obeys, whatever `--patches`
 asked for.
 :::
@@ -170,7 +170,7 @@ asked for.
 Attention is the one place where being generic and being fast pull apart. The
 plain way is to hand the model's own attention the whole stale buffer and take
 the patch's rows back out of what it returns. That is right for every model,
-because it changes nothing the model does — but it computes the whole picture's
+because it changes nothing the model does, but it computes the whole picture's
 attention for every patch.
 
 The quick way asks only for the patch's queries against the buffer's keys, which
@@ -192,7 +192,7 @@ once with your prompt and once without, and the two are combined. Diffuse runs
 both, which is why a twenty-step generation makes forty passes through the
 network.
 
-The two branches are independent, and each keeps its own stale buffers — mixing
+The two branches are independent, and each keeps its own stale buffers: mixing
 them would have one branch borrowing the other's picture. They are told apart by
 the text conditioning they carry, which is the thing that actually differs.
 

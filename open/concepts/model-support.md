@@ -11,8 +11,8 @@ Diffuse assumes a model is **an ordered stack of near-identical layers**, where
 what passes between two layers is a single tensor, and where per-request state
 belongs to the layer that made it.
 
-That is what makes a cut possible anywhere. Everything else — embeddings,
-encoders, output heads, codecs — sits at the ends, and the ends belong to the
+That is what makes a cut possible anywhere. Everything else, embeddings,
+encoders, output heads, codecs, sits at the ends, and the ends belong to the
 machine that asked the question.
 
 ## The three shapes
@@ -28,7 +28,7 @@ output travels once per session, held by each node the way the cache is.
 **Iterative refinement.** The whole stack runs twenty to fifty times to produce
 one result, with no cache carried between passes. This is diffusion: Flux, SD3,
 PixArt for pictures, Wan and CogVideoX for video, Stable Audio for sound.
-Supported, but split a different way — see [diffusion across
+Supported, but split a different way: see [diffusion across
 nodes](/open/concepts/diffusion). The stack is cut into stages as usual, and the
 picture is cut into patches so the stages have something to work on at the same
 time.
@@ -41,8 +41,8 @@ different scales rather than one. It does not fit a chain. Serving it would
 mean a second data plane, which is a different project.
 
 **Recurrent stacks** (Mamba, RWKV). Their layers carry a running state instead
-of a key-value cache. The shape is otherwise ideal for splitting — the state is
-a fixed size, which is friendlier than a growing cache — but one slice cannot
+of a key-value cache. The shape is otherwise ideal for splitting, the state is
+a fixed size, which is friendlier than a growing cache, but one slice cannot
 currently hand that state to the next. This is an engineering gap, not a
 barrier.
 
