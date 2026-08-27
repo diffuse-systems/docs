@@ -120,6 +120,21 @@ This node is in the pool.
 `enroll` writes the identity, hands it to the service user, starts the agent and
 waits to see it registered. Running it twice does nothing the second time.
 
+## What next
+
+At this point the deployment decides and computes, and nothing is serving yet.
+The rest of the journey is three pages, in the order most sites take them:
+
+1. [Serving](/enterprise/serving), to get a model answering on `/v1`. This is
+   the step that turns an installation into something a developer can call.
+2. [Chat interface](/enterprise/chat), to put a chat window in front of it for
+   the people in your organisation who will never call an API. It is a separate
+   repository you clone on whichever machine will run it, and it is the fastest
+   way to get the deployment used by somebody other than the team that
+   installed it.
+3. [Fine-tuning](/enterprise/fine-tuning), when a served model needs to be
+   taught something only your data knows.
+
 ## All-in-one
 
 The coordinator and an agent on the same machine is a supported and common

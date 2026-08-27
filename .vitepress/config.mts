@@ -78,6 +78,7 @@ export default defineConfig({
           text: 'Using it',
           items: [
             { text: 'Serving', link: '/enterprise/serving' },
+            { text: 'Chat interface', link: '/enterprise/chat' },
             { text: 'Fine-tuning', link: '/enterprise/fine-tuning' },
             { text: 'Distillation', link: '/enterprise/distillation' },
           ],
