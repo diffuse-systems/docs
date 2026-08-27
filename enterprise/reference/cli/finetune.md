@@ -47,7 +47,7 @@ The one-command path: it imports the corpus, chooses hyperparameters from its si
 ## Examples
 
 ```bash
-$ diffuse-coordinator finetune qwen2.5-3b --data berichte.jsonl --as berichte-v1
+$ diffuse-coordinator finetune qwen2.5-3b berichte.jsonl
 ```
 
 ```

@@ -35,7 +35,7 @@ Scores the base model and the fine-tune on the same suite, so the number you rea
 ## Examples
 
 ```bash
-$ diffuse-coordinator eval qwen2.5-3b --adapter berichte-v1 --suite berichte-test
+$ diffuse-coordinator eval berichte-test --model qwen2.5-3b+berichte-v1
 ```
 
 ```

@@ -41,7 +41,7 @@ One generation from the terminal, for checking a model is alive.
 ## Examples
 
 ```bash
-$ diffuse-coordinator model run qwen2.5-3b --prompt "Was ist ein Kernspintomograph?"
+$ diffuse-coordinator model run qwen2.5-3b
 ```
 
 ```

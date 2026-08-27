@@ -33,7 +33,7 @@ The one-time password is printed once and may only be used to set another.
 ## Examples
 
 ```bash
-$ diffuse-coordinator account create --login jonas.pfleger --role developer
+$ diffuse-coordinator account create jonas.pfleger --role developer
 ```
 
 ```

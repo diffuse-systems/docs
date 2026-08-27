@@ -41,17 +41,18 @@ diffuse-coordinator distill <CORPUS> [OPTIONS]
 
 ## Notes
 
-Teacher and student in one command: it labels the corpus with the teacher's top-k distributions, trains the student on them, and scores both. The teacher must be served; the student need not be.
+Teacher and student in one command: the teacher **scores the answers your corpus already has**, position by position, and the student trains on those scores. It does not write answers — a corpus of questions alone is refused, naming the first line that is short. The teacher must be served; the student need not be.
 
 ## Examples
 
 ```bash
-$ diffuse-coordinator distill --teacher qwen2.5-3b --student qwen2.5-0.5b-instruct --data berichte.jsonl --as berichte-klein
+$ diffuse-coordinator distill --teacher qwen2.5-3b --student qwen2.5-0.5b-instruct --as berichte-klein berichte.jsonl
 ```
 
 ```
-labelling 2 412 examples with qwen2.5-3b, top-k 64
-  [####################] 2412/2412  retained mass 0.94 median
+corpus     berichte (2 412 examples, imported)
+  labels     qwen2.5-3b scores your answers; it does not write any
+  labels     about 450 MiB on disk (2412 rows x k=64 x 512 tokens)
   training qwen2.5-0.5b-instruct on the soft labels
   job 7c31a8 started
 

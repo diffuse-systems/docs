@@ -37,7 +37,7 @@ diffuse-coordinator distill \
 ```
 
 [`distill`](./reference/cli/distill.md) does both stages: it labels the corpus
-with the teacher's top-k distributions, then trains the student on them. The
+by scoring your answers with the teacher, then trains the student on those scores. The
 flags worth knowing before a long run are `--top-k`, `--temperature` and
 `--alpha`, and the reference page says what each one costs.
 
@@ -54,7 +54,8 @@ is low, raise `--top-k`; the run says so rather than leaving you to work it out.
 ### 5. If the training stage fails, do not label again
 
 ```bash
-diffuse-coordinator distill --labelled-dataset berichte-labelled --student qwen2.5-0.5b --as berichte-klein
+diffuse-coordinator distill --labelled-dataset berichte-labelled \\
+  --teacher qwen2.5-3b --student qwen2.5-0.5b --as berichte-klein berichte.jsonl
 ```
 
 `--labelled-dataset` skips the teacher entirely. Labelling is the expensive
@@ -94,17 +95,22 @@ input you care about, and that fits on hardware the large one never would.
 The same JSONL format as fine-tuning, with one difference that is worth saying
 loudly because it decides how much work you do:
 
-**It does not need assistant turns.** The teacher produces those. Assistant
-messages in your file are ignored if present. A corpus of questions alone is the
-ordinary case.
+**Every line needs an assistant turn.** The teacher does not write answers: it
+*scores* the ones you supply, position by position, and turns those scores into
+the soft labels the student learns from. A line that stops after the question
+has nothing to score, and the run refuses the corpus rather than training on
+half of it — naming the first line that is short.
 
 ```json
-{"messages":[{"role":"user","content":"Welche Fristen gelten für einen Widerspruch?"}]}
-{"messages":[{"role":"user","content":"Wie melde ich einen Datenschutzvorfall?"}]}
+{"messages":[{"role":"user","content":"Welche Fristen gelten für einen Widerspruch?"},{"role":"assistant","content":"Ein Monat ab Zugang des Bescheids."}]}
+{"messages":[{"role":"user","content":"Wie melde ich einen Datenschutzvorfall?"},{"role":"assistant","content":"Innerhalb von 72 Stunden an die Aufsichtsbehörde."}]}
 ```
 
-Somebody who does not know this writes every answer by hand first, which is
-exactly the work distillation exists to remove.
+So the corpus is the same shape as a fine-tuning corpus. What distillation saves
+you is not the writing — it is a **small model that behaves like a large one on
+this corpus**, on hardware the large one would not fit. That is a different
+economy from fine-tuning, and it is the one worth reaching for when the model
+you want to run is smaller than the model that answers well.
 
 ## Running it
 

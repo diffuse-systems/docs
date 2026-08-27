@@ -32,7 +32,7 @@ Changing a role ends that account's sessions, so the new role is what they get.
 ## Examples
 
 ```bash
-$ diffuse-coordinator account role jonas.pfleger --role operator
+$ diffuse-coordinator account role jonas.pfleger operator
 ```
 
 ```

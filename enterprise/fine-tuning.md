@@ -33,11 +33,12 @@ The short path chooses the hyperparameters for you, from the corpus and the
 machine:
 
 ```bash
-diffuse-coordinator finetune qwen2.5-3b --data berichte.jsonl --as berichte-v1
+diffuse-coordinator finetune qwen2.5-3b berichte.jsonl
 ```
 
-[`finetune`](./reference/cli/finetune.md). When you want to choose them
-yourself — rank, epochs, learning rate, which projections to adapt — use
+[`finetune`](./reference/cli/finetune.md) takes the model and the file as
+positional arguments, and derives the adapter's name from the file. When you
+want to choose the hyperparameters yourself — rank, epochs, learning rate, which projections to adapt — use
 [`job create`](./reference/cli/job-create.md), which takes all of them.
 
 ### 4. Watch it
@@ -54,7 +55,7 @@ interrupt. [`job list`](./reference/cli/job-list.md) shows what is running,
 ### 5. Find out whether it worked
 
 ```bash
-diffuse-coordinator eval qwen2.5-3b --adapter berichte-v1 --suite berichte-test
+diffuse-coordinator eval berichte-test --model qwen2.5-3b+berichte-v1
 ```
 
 [`eval`](./reference/cli/eval.md) scores the base and the fine-tune on the same

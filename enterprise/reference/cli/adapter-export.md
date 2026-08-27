@@ -32,7 +32,7 @@ The adapter is yours: trained on your corpus, on your machines. Export works wha
 ## Examples
 
 ```bash
-$ diffuse-coordinator adapter export berichte-v1 --to ./berichte-v1.tar.gz
+$ diffuse-coordinator adapter export berichte-v1 --out ./berichte-v1.tar.gz
 ```
 
 ```

@@ -39,12 +39,14 @@ $ diffuse-coordinator model pull Qwen/Qwen2.5-3B-Instruct --as qwen2.5-3b
 ```
 
 ```
-resolving Qwen/Qwen2.5-3B-Instruct
-  6 files, 6.2 GiB
-  [####################] 6.2 GiB / 6.2 GiB
+resolving Qwen/Qwen2.5-3B-Instruct@main
+  README.md
+  config.json
+  model.safetensors
 
-qwen2.5-3b imported. Serve it with:
-  diffuse-coordinator model serve qwen2.5-3b --pool lab
+  source         https://huggingface.co/Qwen/Qwen2.5-3B-Instruct
+  revision       7ae557604adf67be50417f59c2c2f167def9a775
+  licence        apache-2.0
 ```
 
 ---

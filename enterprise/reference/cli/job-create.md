@@ -40,7 +40,7 @@ The explicit path, when you want to choose the hyperparameters yourself.
 ## Examples
 
 ```bash
-$ diffuse-coordinator job create --base qwen2.5-3b --dataset berichte --as berichte-v1 --rank 32 --epochs 4
+$ diffuse-coordinator job create --model qwen2.5-3b --dataset berichte --as berichte-v1 --rank 32 --epochs 4
 ```
 
 ```

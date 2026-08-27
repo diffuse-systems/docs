@@ -30,7 +30,7 @@ JSONL, one example per line. The coordinator records what you declared it is —
 ## Examples
 
 ```bash
-$ diffuse-coordinator dataset import --from berichte.jsonl --as berichte
+$ diffuse-coordinator dataset import --from berichte.jsonl --as berichte --classification internal
 ```
 
 ```

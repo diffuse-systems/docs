@@ -112,7 +112,7 @@ Import and inspect training data. Customer data, declared not detected
 Fine-tune a model on a file, in one command
 
 ```bash
-diffuse-coordinator finetune qwen2.5-3b --data berichte.jsonl --as berichte-v1
+diffuse-coordinator finetune qwen2.5-3b berichte.jsonl
 ```
 
 ## [`job`](job.md)
@@ -142,7 +142,7 @@ Inspect the adapters runs produced, with their provenance
 Score a base model against a fine-tune on a suite
 
 ```bash
-diffuse-coordinator eval qwen2.5-3b --adapter berichte-v1 --suite berichte-test
+diffuse-coordinator eval berichte-test --model qwen2.5-3b+berichte-v1
 ```
 
 ## [`distill`](distill.md)
@@ -150,7 +150,7 @@ diffuse-coordinator eval qwen2.5-3b --adapter berichte-v1 --suite berichte-test
 Teach a small model what a large one knows: label, train, and score
 
 ```bash
-diffuse-coordinator distill --teacher qwen2.5-3b --student qwen2.5-0.5b-instruct --data berichte.jsonl --as berichte-klein
+diffuse-coordinator distill --teacher qwen2.5-3b --student qwen2.5-0.5b-instruct --as berichte-klein berichte.jsonl
 ```
 
 ## [`licence`](licence.md)
