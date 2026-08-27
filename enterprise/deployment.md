@@ -133,10 +133,34 @@ mutually authenticated TLS over the loopback.
 The intended case rather than an afterthought.
 
 The offline bundle is a tar archive containing both packages, the documents and
-the digests. It contains no script: everything is installed by the package
-manager, and the packages carry both inference backends with every dependency
-they import. Nothing is fetched at install time and nothing is fetched when a
-node is given a model.
+the digests — about 275 MB. It contains no script: everything is installed by
+the package manager, and the packages carry both inference backends with every
+dependency they import. Nothing is fetched at install time and nothing is
+fetched when a node is given a model.
+
+On a machine with a route out:
+
+```bash
+curl -fsSLO https://github.com/diffuse-systems/releases/releases/latest/download/diffuse-enterprise.tar.gz
+curl -fsSLO https://github.com/diffuse-systems/releases/releases/latest/download/SHA256SUMS
+
+# Check it here, while you can still fetch it again.
+sha256sum --ignore-missing -c SHA256SUMS
+```
+
+`--ignore-missing` because `SHA256SUMS` covers all three published assets and
+you have taken one. Carry both files across, check again after the copy, then:
+
+```bash
+tar xzf diffuse-enterprise.tar.gz
+cd diffuse-enterprise-*
+sha256sum -c SHA256SUMS          # the bundle's own, over its contents
+sudo apt install ./diffuse-coordinator_amd64.deb
+```
+
+There are two `SHA256SUMS` and they answer different questions: the one beside
+the bundle says the archive is what we published, the one inside says the
+packages are the ones that went in.
 
 Models arrive the same way. Put a file on the coordinator and import it:
 
