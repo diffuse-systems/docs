@@ -3,14 +3,41 @@
 Installing, upgrading, and the two procedures you want written down before you
 need them.
 
+## Get the packages
+
+These links always point at the newest release. They carry no version, so they
+do not change between releases and neither does anything you script against
+them.
+
+```bash
+curl -fsSLO https://github.com/diffuse-systems/releases/releases/latest/download/diffuse-coordinator_amd64.deb
+curl -fsSLO https://github.com/diffuse-systems/releases/releases/latest/download/diffuse-node-agent_cpu_amd64.deb
+curl -fsSLO https://github.com/diffuse-systems/releases/releases/latest/download/SHA256SUMS
+
+# Check what you downloaded before you install it.
+sha256sum -c SHA256SUMS
+```
+
+`sha256sum -c` prints `OK` per file. Anything else means the download is not
+what was published, and the answer is to fetch it again rather than to install
+it.
+
+The version is not in the filename; it is in the package and in the release
+tag. `dpkg -I diffuse-coordinator_amd64.deb | grep Version` says which one you
+have.
+
 ## Two commands
 
 On the machine that will coordinate:
 
 ```bash
-sudo apt install ./diffuse-coordinator_1.0.0_amd64.deb
+sudo apt install ./diffuse-coordinator_amd64.deb
 sudo diffuse-coordinator licence set ./licence
 ```
+
+**The licence comes from us.** It arrives by email when your contract starts,
+as one file. It is signed, so it is verified before anything is replaced and a
+wrong file cannot take a running deployment down.
 
 The first asks one question, the name of your organisation, which names the
 deployment's certificate authority and appears in every certificate the cluster
@@ -49,7 +76,7 @@ apt tells a local file from a repository name.
 ## And a machine that computes
 
 ```bash
-sudo apt install ./diffuse-node-agent_1.0.0_cpu_amd64.deb
+sudo apt install ./diffuse-node-agent_cpu_amd64.deb
 sudo diffuse-node-agent enroll --token DFE1-...
 ```
 
@@ -91,8 +118,8 @@ shape: a single workstation that both decides and computes. Install both
 packages, enrol against the loopback, and everything else is identical.
 
 ```bash
-sudo apt install ./diffuse-coordinator_1.0.0_amd64.deb
-sudo apt install ./diffuse-node-agent_1.0.0_cpu_amd64.deb
+sudo apt install ./diffuse-coordinator_amd64.deb
+sudo apt install ./diffuse-node-agent_cpu_amd64.deb
 sudo diffuse-coordinator licence set ./licence
 sudo diffuse-node-agent enroll --endpoint https://127.0.0.1:7444 --token DFE1-...
 ```
@@ -163,7 +190,7 @@ matters:
 
 ```bash
 # 1. Install without letting the package create a deployment.
-sudo DIFFUSE_NO_AUTO_INIT=1 apt-get install -y ./diffuse-coordinator_1.0.0_amd64.deb
+sudo DIFFUSE_NO_AUTO_INIT=1 apt-get install -y ./diffuse-coordinator_amd64.deb
 
 # 2. Put the deployment back.
 sudo tar xzf diffuse-backup-YYYYMMDD.tar.gz -C /
@@ -211,7 +238,7 @@ silently.
 ## If your site already has a certificate authority
 
 ```bash
-sudo DIFFUSE_NO_AUTO_INIT=1 apt-get install -y ./diffuse-coordinator_1.0.0_amd64.deb
+sudo DIFFUSE_NO_AUTO_INIT=1 apt-get install -y ./diffuse-coordinator_amd64.deb
 sudo diffuse-coordinator init \
      --root-ca-cert /path/to/root.crt --root-ca-key /path/to/root.key
 sudo systemctl enable --now diffuse-coordinator diffuse-api
