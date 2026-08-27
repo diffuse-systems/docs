@@ -3,6 +3,15 @@
 Installing, upgrading, and the two procedures you want written down before you
 need them.
 
+## Before you start: Debian 12
+
+**The machines that compute must run Debian 12 (bookworm).** The node-agent
+package requires python3 3.11 exactly — its ML wheels are built against that
+ABI — so `apt` refuses it on Debian 13, Ubuntu 22.04 and Ubuntu 24.04. The
+coordinator is less fussy, but a deployment needs agents.
+
+[Limitations](./limitations.md) has the detail and the fix that would lift it.
+
 ## Get the packages
 
 These links always point at the newest release. They carry no version, so they

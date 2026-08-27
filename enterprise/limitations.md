@@ -46,12 +46,25 @@ Pre-training a model from scratch is not supported and is not on the roadmap.
 Text in, text out, plus PDF and text file extraction. Vision is designed and
 not built. Audio and video are long-term scope and nothing more.
 
-## Debian and Ubuntu only, today
+## Debian 12 only, today
 
-Packages are built against glibc 2.36, which covers Debian 12 and newer and
-Ubuntu 22.04 LTS and newer. RPM packaging for RHEL and SUSE is a separate piece
-of work and is not published. Linux on x86_64; there is no Windows or macOS
-agent.
+Not "Debian and Ubuntu", and not "12 and newer" — **Debian 12 (bookworm),
+exactly**, on every machine that runs a node agent.
+
+The agent package declares `python3 (>= 3.11), python3 (<< 3.12)`, because its
+ML wheels are compiled against cpython-311's ABI. `apt` refuses the install
+anywhere else rather than putting down something that would fail later, which
+rules out Debian 13 (python 3.13), Ubuntu 22.04 (3.10) and Ubuntu 24.04 (3.12).
+
+The coordinator has no such constraint and installs from Debian 12 onwards, but
+that does not widen the product: a deployment needs machines that compute, and
+those run the agent.
+
+Bundling a self-contained python into the agent package would lift this in one
+step, and it is the intended fix. It is not done.
+
+RPM packaging for RHEL and SUSE is a separate piece of work and is not
+published. Linux on x86_64; there is no Windows or macOS agent.
 
 ## No published performance figures
 
