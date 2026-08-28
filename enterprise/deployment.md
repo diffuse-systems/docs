@@ -3,14 +3,19 @@
 Installing, upgrading, and the two procedures you want written down before you
 need them.
 
-## Before you start: Debian 12
+## Before you start: a 64-bit Linux with glibc 2.36
 
-**The machines that compute must run Debian 12 (bookworm).** The node-agent
-package requires python3 3.11 exactly, its ML wheels are built against that
-ABI, so `apt` refuses it on Debian 13, Ubuntu 22.04 and Ubuntu 24.04. The
-coordinator is less fussy, but a deployment needs agents.
+**Debian 12 and 13, Ubuntu 22.04 and 24.04**, and anything else that meets that
+floor. **No Python is required.** The node-agent package carries its own
+interpreter, so it installs on a machine that has none at all.
 
-[Limitations](./limitations.md) has the detail and the fix that would lift it.
+This changed recently and older notes say otherwise. The agent's ML wheels are
+compiled against one Python ABI, so the package used to demand python 3.11
+exactly and `apt` refused it anywhere but Debian 12. It now ships CPython
+inside its own directory, at a cost of about 90 MiB.
+
+All four distributions are installed on, and a model served, on every release,
+so this is a measurement rather than an intention.
 
 ## Before you start: a CPU with AVX2
 

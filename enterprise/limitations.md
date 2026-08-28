@@ -46,25 +46,25 @@ Pre-training a model from scratch is not supported and is not on the roadmap.
 Text in, text out, plus PDF and text file extraction. Vision is designed and
 not built. Audio and video are long-term scope and nothing more.
 
-## Debian 12 only, today
+## Linux on x86_64, and no Windows or macOS agent
 
-Not "Debian and Ubuntu", and not "12 and newer": **Debian 12 (bookworm),
-exactly**, on every machine that runs a node agent.
+**Debian 12 and 13, Ubuntu 22.04 and 24.04**, and any 64-bit Linux with glibc
+2.36 or newer. All four are installed on and serve a model on every release.
 
-The agent package declares `python3 (>= 3.11), python3 (<< 3.12)`, because its
-ML wheels are compiled against cpython-311's ABI. `apt` refuses the install
-anywhere else rather than putting down something that would fail later, which
-rules out Debian 13 (python 3.13), Ubuntu 22.04 (3.10) and Ubuntu 24.04 (3.12).
+This entry used to say "Debian 12 only, today", because the agent's ML wheels
+are compiled against one Python ABI and the package demanded python 3.11
+exactly. The package carries its own interpreter now, so it installs on a
+machine with no Python at all, and the limitation is gone. It is left here
+rather than deleted because older notes and older quotes still say Debian 12,
+and somebody comparing the two deserves to know which is current.
 
-The coordinator has no such constraint and installs from Debian 12 onwards, but
-that does not widen the product: a deployment needs machines that compute, and
-those run the agent.
+What remains: **a CPU with AVX2** on every machine that serves a GGUF model,
+which is Intel Haswell (2013) or AMD Excavator (2015) and newer. The package
+refuses to install below that and names the missing instruction. Some Pentium
+and Celeron parts sold well after 2013 have AVX2 switched off.
 
-Bundling a self-contained python into the agent package would lift this in one
-step, and it is the intended fix. It is not done.
-
-RPM packaging for RHEL and SUSE is a separate piece of work and is not
-published. Linux on x86_64; there is no Windows or macOS agent.
+RPM packaging for RHEL and SUSE is built but not published. There is no Windows
+or macOS agent.
 
 ## No published performance figures
 
