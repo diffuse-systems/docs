@@ -12,6 +12,28 @@ coordinator is less fussy, but a deployment needs agents.
 
 [Limitations](./limitations.md) has the detail and the fix that would lift it.
 
+## Before you start: a CPU with AVX2
+
+**Every machine that serves a GGUF model needs `avx2`, `fma`, `f16c` and
+`bmi2`.** The node agent ships llama.cpp built for x86-64-v3, whose oldest CPU
+is Intel Haswell (2013) or AMD Excavator (2015). Check a machine before you
+count it in:
+
+```bash
+grep -o -m1 -E 'avx2|fma|f16c|bmi2' /proc/cpuinfo | sort -u
+```
+
+Four lines back and the machine is fine. The package refuses to install
+otherwise and names the instruction it did not find.
+
+Worth knowing for a mixed park: Intel sold Pentium and Celeron parts well past
+2013 with `avx2` switched off, so a 2019 office desktop can fail this while a
+2014 laptop passes. Age is not the test, the command is.
+
+A machine below the line can still serve safetensors models on the reference
+backend, which is PyTorch and needs none of this. Install it with
+`DIFFUSE_ALLOW_SLOW_CPU=1` and keep GGUF deployments off it with pools.
+
 ## Get the packages
 
 These links always point at the newest release. They carry no version, so they
