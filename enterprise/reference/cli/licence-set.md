@@ -2,8 +2,6 @@
 
 Install a licence file and bring the deployment up on it.
 
-.
-
 **The second and last command of an installation.** It checks the file is a licence this build trusts before touching anything, puts it where the coordinator reads it, restarts the services, waits for them to answer, and prints what you need to keep. A failure at any step says which step and why, and leaves the previous licence in place.
 
 ## Synopsis

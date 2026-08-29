@@ -106,6 +106,8 @@ export default defineConfig({
             // product repository regenerates and diffs them, so editing a page
             // here is editing something that will be overwritten.
             { text: 'CLI, every command', link: '/enterprise/reference/cli/index' },
+            { text: 'Node agent commands', link: '/enterprise/reference/agent-cli/index' },
+            { text: 'The agent configuration file', link: '/enterprise/reference/agent-configuration' },
             { text: 'Glossary', link: '/enterprise/glossary' },
           ],
         },

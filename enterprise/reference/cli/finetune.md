@@ -2,8 +2,6 @@
 
 Fine-tune a model on a file, in one command.
 
-.
-
 Imports the corpus, chooses hyperparameters from its size and the machine, and starts the run. Does not serve the result: the command for that is printed when it finishes.
 
 ## Synopsis

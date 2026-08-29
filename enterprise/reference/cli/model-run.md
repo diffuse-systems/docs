@@ -2,8 +2,6 @@
 
 Fetch a model and serve it: the two commands most people want as one.
 
-.
-
 `pull` then `serve`, with the pull skipped when the model is already here. It exists because "get me a model running" is one intention, and splitting it across two commands means an operator who does the first and forgets the second has a coordinator holding weights and serving nothing.
 
 ## Synopsis

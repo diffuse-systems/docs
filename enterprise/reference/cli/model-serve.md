@@ -2,8 +2,6 @@
 
 Place a model on the nodes of a pool.
 
-.
-
 Under `model` rather than at the top level: `diffuse-coordinator serve` has meant "run the coordinator" since milestone 0, and it is in every script, unit file and test. Overloading the most-used command so that its meaning depends on whether a positional argument is present is the kind of ambiguity one typo away from starting the wrong thing.
 
 ## Synopsis

@@ -2,8 +2,6 @@
 
 Tear a deployment down.
 
-.
-
 **`rm`, like everything else.** Tokens, API keys and models are all removed with `rm`; this was the one `delete` in the product, which is the kind of inconsistency an operator discovers by having a command refused. `delete` still works and is hidden, so nobody's script breaks.
 
 ## Synopsis

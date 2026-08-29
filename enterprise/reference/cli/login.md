@@ -2,8 +2,6 @@
 
 Sign in as a person, and keep the session on this machine.
 
-.
-
 From milestone 11 an administrator is an account, not a certificate. A certificate is still how a *service* authenticates, a configuration manager, a CI job, and both are on the audit trail under their own name.
 
 ## Synopsis

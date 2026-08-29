@@ -28,6 +28,23 @@ terminal does.
 
 On the machine itself: `diffuse-node-agent enroll --token DFE1-...`
 
+## On a machine that computes
+
+The agent has its own commands and its own configuration file, and they are
+what you reach for when one machine has stopped working rather than the cluster.
+
+| | |
+|---|---|
+| `enroll --token DFE1-...` | join this machine to a deployment |
+| `status` | what this machine knows, from local files, with no network |
+| `config show` | every setting in `/etc/diffuse/agent.toml`, and what it does |
+| `config set-coordinator <url>` | point it at a different coordinator, checking the address first |
+
+**[Every agent command](./reference/agent-cli/index.md)** is generated from the
+binary in the same way. **[The agent configuration
+file](./reference/agent-configuration.md)** explains each setting, when a change
+takes effect, and how to repair a machine that is pointed at the wrong address.
+
 ### Models
 
 | | |
