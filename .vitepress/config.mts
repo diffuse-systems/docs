@@ -95,7 +95,10 @@ export default defineConfig({
         },
         {
           text: 'Security',
-          items: [{ text: 'Surfaces and threat model', link: '/enterprise/security' }],
+            items: [
+              { text: 'Surfaces and threat model', link: '/enterprise/security' },
+              { text: 'What has been verified', link: '/enterprise/verified' },
+            ],
         },
         {
           text: 'Reference',

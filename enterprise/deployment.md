@@ -17,6 +17,14 @@ inside its own directory, at a cost of about 90 MiB.
 All four distributions are installed on, and a model served, on every release,
 so this is a measurement rather than an intention.
 
+## What has been checked on a deployment like yours
+
+Before you install, **[what has been verified](./verified.md)** reports an
+attacker placed on the same network as a running deployment: what it could not
+read, what it could not connect to, and what it does not prove. It exercises the
+same packages you are about to install, and the check ships in the product so
+you can run it against your own cluster.
+
 ## Before you start: a CPU with AVX2
 
 **Every machine that serves a GGUF model needs `avx2`, `fma`, `f16c` and

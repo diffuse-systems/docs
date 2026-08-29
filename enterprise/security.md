@@ -4,6 +4,12 @@ Every surface that is reachable from outside a process, what it is exposed to,
 and what is not mitigated. The last part is the point: a threat model that only
 lists defences is a brochure.
 
+The principles below are claims. **[What has been verified](./verified.md)**
+reports an attacker placed on the network of a running deployment and the eleven
+things it could not do, with the commands, the raw output, and a section on what
+the exercise does not prove. It runs against the published packages, and you can
+run it yourself.
+
 ## Principles
 
 **Mutual TLS everywhere, TLS 1.3 only.** No plaintext transport exists, in any
