@@ -151,6 +151,43 @@ imported on the coordinator. Somebody who signs in to the chat interface but is
 not in `users.csv` reaches the endpoint and is refused there, which is the
 correct place for that decision to be made.
 
+### What goes in users.csv
+
+Four columns, in this order. The header line is optional: it is skipped when its
+first field is `subject`, and a file without one is read from its first line.
+Blank lines and lines beginning with `#` are ignored, so the comments below can
+stay in the file you keep.
+
+```csv
+# subject,address,models,pool
+#
+# subject  the stable identifier your chat interface knows a person by, not
+#          their address. It is what the gateway asserts, so it has to match
+#          exactly. Required: a row without one is refused, by line number.
+# address  what an operator reads in `identity list`. Optional, and never used
+#          for authorisation. Quote the field if it contains a comma.
+# models   the models this person may call, separated by `;`. Empty means
+#          every model this deployment serves.
+# pool     restrict them to one pool. Empty means no restriction.
+subject,address,models,pool
+6a8edf7b6bc7078da8fac79b,marie@klinik.example,,
+6a8edf7b6bc7078da8fac7a4,jonas@klinik.example,patienten-7b,
+6a8edf7b6bc7078da8fac7b1,"Weber, Anke <anke@klinik.example>",allgemein;patienten-7b,lab
+```
+
+**`subject` is the identifier, not the address.** It is whatever your chat
+interface uses as a stable user id, and it is what the gateway sends in the
+`X-Diffuse-User-Id` header. An address that changes when somebody marries is not
+a stable identifier, which is why the two are separate columns and only the
+first one decides anything.
+
+Running the import again updates people rather than duplicating them, and it
+never re-enables somebody an operator disabled.
+
+The same table is in **[the CLI reference](./reference/cli/identity-import.md)**,
+generated from the binary, and a test asserts the example above is read the way
+this page describes it.
+
 ## Running it
 
 ```bash
@@ -236,6 +273,20 @@ deployment's audit trail.
 The full write-up, with the residual risks named and accepted, is
 `THREAT_MODEL.md` in the diffuse-chat repository, and the deployment's own
 surfaces are in [Security](/enterprise/security).
+
+## Files cannot be uploaded, and the interface says so
+
+**This deployment is text to text.** The upload paths in the chat interface are
+closed, in both profiles, and that is deliberate.
+
+An earlier build left them open. A PDF dropped into the composer was accepted,
+converted to text, and pasted into the prompt: the machine worked for three
+minutes and answered about a wall of extracted characters, with nothing anywhere
+saying that was what had happened. An interface that accepts a file it cannot use
+teaches the person that the model is bad at reading documents, when the truth is
+that it never saw one.
+
+When the deployment becomes multimodal this changes, and it changes here first.
 
 ## The limitation to know before a user reports it
 
