@@ -35,11 +35,21 @@ sudo diffuse-node-agent config show
 
 ### `coordinator_endpoint`
 
-Where this agent registers and sends its heartbeats, over mTLS. The one setting
-that strands a machine when it is wrong: the agent starts, cannot reach anything,
-and the node never appears in `diffuse-coordinator nodes`.
+Where an agent registers and sends its heartbeats, over mTLS, **before it has
+enrolled**, or when it runs with certificates passed on the command line.
 
-**Takes effect on restart.** The agent reads it once at startup.
+**An enrolled machine does not read it.** Enrolment records the address the
+coordinator hands back in the state directory, and the agent registers there
+from then on. This page used to say otherwise, and `config set-coordinator` used
+to write only this file, so on an enrolled machine it changed nothing about where
+the node registered. It now updates both.
+
+When the registration address is wrong the agent starts, cannot reach anything,
+and the node appears on the coordinator only under "Enrolled, never connected" in
+`diffuse-coordinator nodes`.
+
+**Takes effect on restart.** The agent reads its registration address once at
+startup.
 
 Change it with the command below, never with an editor.
 

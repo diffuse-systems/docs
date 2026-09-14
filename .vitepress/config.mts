@@ -72,7 +72,10 @@ export default defineConfig({
         },
         {
           text: 'Deployment',
-          items: [{ text: 'Installing and operating', link: '/enterprise/deployment' }],
+          items: [
+            { text: 'Installing and operating', link: '/enterprise/deployment' },
+            { text: 'Network and ports', link: '/enterprise/network' },
+          ],
         },
         {
           text: 'Using it',

@@ -19,6 +19,8 @@ diffuse-node-agent enroll [OPTIONS]
 
 ## Notes
 
+**It says which of three things happened, and only one of them is a success.** In the pool: the coordinator has registered this node. Not in the pool yet: nothing on this machine started the agent, with the command to start it and how to check from the coordinator. Cannot join: this machine cannot reach the address the coordinator gave it, with which of four things is wrong, and a non-zero exit.
+
 The endpoint comes from `/etc/diffuse/agent.toml`, which the package writes at install time, so enrolling on a packaged machine is the token and nothing else. `--endpoint` overrides it for a machine configured some other way.
 
 A machine that already holds an identity is not re-enrolled: a second run of Ansible, a reboot or a package reinstall costs no token use and creates no second node.
@@ -30,13 +32,14 @@ $ diffuse-node-agent enroll --token DFE1-MXARW34E-WMV4J25CW2ZAKW0WP9DMQFX5N4-RBY
 ```
 
 ```
-enrolled as node-04.
+This machine has an identity (node-04); it is not in the pool yet.
+
+  identity     /var/lib/diffuse-node-agent
   coordinator  https://coordinator.internal:7443
-  identity     /var/lib/diffuse-node-agent/node.crt
+  pool         lab
+  expires      in 89 days
 
-The agent starts on boot. Start it now with:
-
-    sudo systemctl start diffuse-node-agent
+This node is in the pool.
 ```
 
 ---

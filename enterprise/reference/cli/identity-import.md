@@ -26,7 +26,28 @@ diffuse-coordinator identity import <FILE> [OPTIONS]
 
 ## Notes
 
-A CSV of `subject,address,models,pool`. `subject` is the stable identifier your chat interface knows a person by, not their address. An empty `models` column means every served model. Running it again updates people rather than duplicating them, and never re-enables somebody you disabled.
+**The whole format, because it exists nowhere else.** Four columns, in this order:
+
+```
+# subject,address,models,pool
+#
+# subject  the stable identifier your chat interface knows a person by, not
+#          their address. It is what a gateway asserts, so it has to match
+#          exactly. Required; a row without one is refused by line number.
+# address  what an operator reads in `identity list`. Optional, never used
+#          for authorisation. Quote it if it contains a comma.
+# models   models this person may call, separated by `;`. Empty means every
+#          model this deployment serves.
+# pool     restrict them to one pool. Empty means no restriction.
+subject,address,models,pool
+6a8edf7b6bc7078da8fac79b,marie@klinik.example,,
+6a8edf7b6bc7078da8fac7a4,jonas@klinik.example,patienten-7b,
+6a8edf7b6bc7078da8fac7b1,"Weber, Anke <anke@klinik.example>",allgemein;patienten-7b,lab
+```
+
+**The header is optional.** It is skipped when its first field is `subject`, and a file without one is read from its first line: half the exports a directory produces have a header and half do not. Blank lines and lines starting with `#` are ignored, so the comments above can stay in the file you keep. Fields may be quoted with `"`, and `""` is a literal quote.
+
+Running it again updates people rather than duplicating them, and never re-enables somebody you disabled.
 
 ## Examples
 

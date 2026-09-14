@@ -31,14 +31,34 @@ Verified before anything is replaced, so a wrong file cannot take a running depl
 ## Examples
 
 ```bash
-$ diffuse-coordinator licence set /tmp/klinik-2027.licence
+$ sudo diffuse-coordinator licence set /tmp/klinik-2027.licence
 ```
 
 ```
-Licence installed.
-  organisation  Klinik Beispiel
-  expires       2027-06-30 00:00:00Z
-  no restart needed; the running coordinator has re-read it.
+organisation  Klinik Beispiel
+  licence       lic-2027-0142
+  edition       enterprise
+  nodes         24
+  expires       in 289 days
+
+  installed     /etc/diffuse/licence
+
+  It is ready. Open:
+
+      https://coordinator.internal:7446/console
+
+  ...
+
+  Reachable from your network, on this machine (firewall: ufw):
+
+    7443  control plane: heartbeats and slices, mTLS   open (ufw)
+    7444  enrolment: machines joining with a token     open (ufw)
+    8443  the OpenAI-compatible API                    open (ufw)
+
+  This product opens these three by default. Once every machine has joined,
+  close enrolment:
+
+    sudo diffuse-coordinator firewall close-enrolment
 ```
 
 ---

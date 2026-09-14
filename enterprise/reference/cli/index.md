@@ -162,6 +162,16 @@ What this deployment is entitled to, and until when
 | [`licence show`](licence-show.md) | Show the licence this coordinator is running under |
 | [`licence set`](licence-set.md) | Install a licence file and bring the deployment up on it |
 
+## [`firewall`](firewall.md)
+
+The three ports this machine must expose, and the host firewall in front of them
+
+| command | what it does |
+|---|---|
+| [`firewall status`](firewall-status.md) | Which of the three ports are reachable from the network, and why |
+| [`firewall open`](firewall-open.md) | Open the control plane, enrolment and the API in the host firewall |
+| [`firewall close-enrolment`](firewall-close-enrolment.md) | Close enrolment, once every machine has joined |
+
 ## [`login`](login.md)
 
 Sign in as a person, and keep the session on this machine

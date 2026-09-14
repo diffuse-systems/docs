@@ -17,6 +17,13 @@ inside its own directory, at a cost of about 90 MiB.
 All four distributions are installed on, and a model served, on every release,
 so this is a measurement rather than an intention.
 
+**Windows Subsystem for Linux is not supported in this release**, and both
+packages say so when they are installed on it. WSL runs without systemd unless
+you enable it, so nothing starts the services; and WSL2 sits behind its own NAT,
+so other machines cannot reach a node there, while a machine that serves a model
+must accept connections on 7445. Neither has been tested, which is why it is not
+announced.
+
 ## What has been checked on a deployment like yours
 
 Before you install, **[what has been verified](./verified.md)** reports an
@@ -143,7 +150,7 @@ Or, if the agent binary is already deployed:
 Enrolling then reports what happened:
 
 ```
-Enrolled as node-01.
+This machine has an identity (node-01); it is not in the pool yet.
 
   identity     /var/lib/diffuse-node-agent
   coordinator  https://coordinator.internal:7443
@@ -158,6 +165,11 @@ waits to see it registered. Running it twice does nothing the second time.
 ## What next
 
 At this point the deployment decides and computes, and nothing is serving yet.
+
+Before your firewall team asks: **[Network and ports](/enterprise/network)** says
+which port has to be open on which machine, topology by topology, and how to
+close enrolment once every machine has joined.
+
 The rest of the journey is three pages, in the order most sites take them:
 
 1. [Serving](/enterprise/serving), to get a model answering on `/v1`. This is

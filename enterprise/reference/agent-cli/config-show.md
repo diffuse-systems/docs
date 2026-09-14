@@ -21,9 +21,13 @@ $ sudo diffuse-node-agent config show
 ```
 /etc/diffuse/agent.toml
 
+  registers at           https://coordinator.internal:7443
+                         recorded at enrolment in /var/lib/diffuse-node-agent; the address the agent uses
+                         change it with `config set-coordinator`, which updates both
+
   coordinator_endpoint   https://coordinator.internal:7443
-                         where this agent registers and heartbeats, over mTLS
-                         takes effect on `systemctl restart diffuse-node-agent`
+                         not read on this machine: it is enrolled, and registers at the address above
+                         read at the next enrolment, not by a running agent
 
   enrol_endpoint         https://coordinator.internal:7444
                          where `enroll` presents its token
