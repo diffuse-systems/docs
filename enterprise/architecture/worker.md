@@ -43,8 +43,8 @@ Both ship inside the node-agent package with every dependency they import.
 **The reference backend computes a model's outer loop itself**, because a slice
 holds some of the layers and a model's own `forward` runs all of them: embed,
 the layers it owns, and for the last slice the final norm and the head. Some
-families do more there — Granite scales its embeddings and its logits, Cohere
-its logits, Gemma 2 soft-caps them — and until 1.3.3 the slice left that out,
+families do more there: Granite scales its embeddings and its logits, Cohere
+its logits, Gemma 2 soft-caps them. Until 1.3.3 the slice left that out,
 so five families answered fluent nonsense. Each architecture it serves is now in
 a table with what it does outside its layers, and each is proven by a test that
 computes a model of it whole, in two slices and in three against transformers'
