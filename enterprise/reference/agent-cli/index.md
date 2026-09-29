@@ -27,3 +27,12 @@ Read this agent's configuration file, and repair the one setting that strands a 
 | [`config show`](config-show.md) | Every setting in /etc/diffuse/agent.toml, what it does, and when a change to it takes effect |
 | [`config set-coordinator`](config-set-coordinator.md) | Point this machine at a different coordinator |
 
+## [`firewall`](firewall.md)
+
+The data port this machine must expose, and the host firewall in front of it
+
+| command | what it does |
+|---|---|
+| [`firewall status`](firewall-status.md) | Whether the data port is reachable, from where, and why |
+| [`firewall open`](firewall-open.md) | Open the data port to the private networks this machine is on |
+

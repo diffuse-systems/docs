@@ -30,7 +30,7 @@ $ sudo diffuse-coordinator firewall close-enrolment
 ```
 Enrolment (7444) is closed in ufw. New machines cannot join. What ran:
 
-    sudo ufw delete allow 7444/tcp
+    sudo ufw delete allow from 192.168.178.0/24 to any port 7444 proto tcp
 
   What this does not affect: machines already in the pool. Their heartbeats,
   slices, training work and certificate renewals travel over connections each

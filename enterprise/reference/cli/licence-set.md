@@ -51,12 +51,13 @@ organisation  Klinik Beispiel
 
   Reachable from your network, on this machine (firewall: ufw):
 
-    7443  control plane: heartbeats and slices, mTLS   open (ufw)
-    7444  enrolment: machines joining with a token     open (ufw)
-    8443  the OpenAI-compatible API                    open (ufw)
+    7443  control plane: heartbeats and slices, mTLS         from 192.168.178.0/24 (eth0)
+    7444  enrolment: machines joining with a token           from 192.168.178.0/24 (eth0)
+    7446  console and sign-in: people, TLS and a password    from 192.168.178.0/24 (eth0)
+    8443  the OpenAI-compatible API                          from 192.168.178.0/24 (eth0)
 
-  This product opens these three by default. Once every machine has joined,
-  close enrolment:
+  This product opens these by default. Once every machine has joined, close
+  enrolment:
 
     sudo diffuse-coordinator firewall close-enrolment
 ```

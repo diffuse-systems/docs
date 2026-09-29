@@ -164,13 +164,21 @@ What this deployment is entitled to, and until when
 
 ## [`firewall`](firewall.md)
 
-The three ports this machine must expose, and the host firewall in front of them
+The ports this machine must expose, and the host firewall in front of them
 
 | command | what it does |
 |---|---|
-| [`firewall status`](firewall-status.md) | Which of the three ports are reachable from the network, and why |
-| [`firewall open`](firewall-open.md) | Open the control plane, enrolment and the API in the host firewall |
+| [`firewall status`](firewall-status.md) | Which of this machine's ports are reachable, from where, and why |
+| [`firewall open`](firewall-open.md) | Open the coordinator's ports to the private networks this machine is on |
 | [`firewall close-enrolment`](firewall-close-enrolment.md) | Close enrolment, once every machine has joined |
+
+## [`certificate`](certificate.md)
+
+This machine's certificate: the names and addresses nodes reach it by
+
+| command | what it does |
+|---|---|
+| [`certificate renew`](certificate-renew.md) | Issue this machine's certificate again, for the names and addresses it has now |
 
 ## [`login`](login.md)
 
