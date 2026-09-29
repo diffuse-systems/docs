@@ -24,9 +24,12 @@ and use the others for other models, or for training.
 
 ## Which models can we run?
 
-Anything the backend can load, when it fits on one machine. When it does not,
-only safetensors with a verified layout are split, and a GGUF is never split.
-[Model support](/enterprise/model-support) is the page that says this precisely.
+A GGUF of any architecture llama.cpp computes, whole on one machine. A
+safetensors model of one of the twenty architectures this build is proven to
+compute exactly as transformers does, whole or split across machines; any other
+safetensors architecture is refused rather than computed and possibly wrong.
+[Model support](/enterprise/model-support) lists them and says how they are
+proven.
 
 ## Can we fine-tune any model we serve?
 

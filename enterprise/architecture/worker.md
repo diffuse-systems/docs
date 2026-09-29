@@ -36,8 +36,19 @@ reason, and the coordinator makes it visible.
 | Splits across machines | no | yes |
 | Trains | no | yes |
 | CPU compute type | as quantised | float32 |
+| Architectures | what llama.cpp computes | the twenty it is proven on; any other is refused |
 
 Both ship inside the node-agent package with every dependency they import.
+
+**The reference backend computes a model's outer loop itself**, because a slice
+holds some of the layers and a model's own `forward` runs all of them: embed,
+the layers it owns, and for the last slice the final norm and the head. Some
+families do more there — Granite scales its embeddings and its logits, Cohere
+its logits, Gemma 2 soft-caps them — and until 1.3.3 the slice left that out,
+so five families answered fluent nonsense. Each architecture it serves is now in
+a table with what it does outside its layers, and each is proven by a test that
+computes a model of it whole, in two slices and in three against transformers'
+own code; the package build runs that test with the libraries it ships.
 
 The last row has a consequence people meet in practice: on a CPU the reference
 backend computes in float32 whatever the file said, because CPU bfloat16 is

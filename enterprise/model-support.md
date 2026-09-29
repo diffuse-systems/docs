@@ -7,78 +7,79 @@ the product actually enforces rather than a statement of intent.
 ## The short answer
 
 ```
-Does the model fit on one machine in the pool?
+Is the model a GGUF file?
 
-  YES ──> It runs there, whole. Any architecture the backend can load.
-          Dense, mixture of experts, hybrid. GGUF or safetensors.
-          This is the ordinary case.
+  YES ──> llama.cpp runs it, whole, on one machine that holds it.
+          Whatever architecture llama.cpp computes. Never split.
 
-  NO  ──> Can it be split?
+  NO, safetensors ──> Is its architecture one this build is proven on?
 
-          safetensors AND a known layout ──> split across machines by layer
-          GGUF                           ──> refused, whatever the pool size
-          unknown layout                 ──> refused, and the message says why
+          NO  ──> refused, by name, before anything is fetched;
+                  its GGUF build is served whole
+          YES ──> whole on one machine that holds it, or, when none
+                  does and you allow it, split by layer across machines
 ```
 
-Everything that is served can also be fine-tuned and distilled, with one
-exception noted under [fine-tuning](#what-fine-tuning-and-distillation-need).
+Everything that is served can also be fine-tuned and distilled, with the
+restrictions noted under [fine-tuning](#what-fine-tuning-and-distillation-need).
 
-## Running whole: the ordinary case
+## Two backends, two rules
 
-If a model fits on one machine, its architecture does not matter. The backend
-loads the file and serves it. There is no list of blessed architectures for this
-path, and there is nothing to check beyond memory.
+**A GGUF file** is computed by llama.cpp, the fast backend, whole on one
+machine. Which architectures it computes is llama.cpp's list, and the catalogue
+entries are the ones this build verified by asking each a question it cannot
+answer by luck.
 
-| | |
+**A safetensors model** is computed by the reference backend, which is what can
+hold part of a model, and **only for architectures it has been proven on**:
+
+| Dense | Mixture of experts |
 |---|---|
-| Formats | GGUF and safetensors |
-| Architectures | anything the backend loads: dense, mixture of experts, hybrid state-space, whatever ships next |
-| What decides | free memory on one machine, measured against the model plus its context |
+| `llama`, `mistral`, `qwen2`, `qwen3`, `gemma`, `gemma2`, `cohere`, `granite`, `olmo`, `olmo2`, `stablelm`, `starcoder2`, `phi3`, `smollm3` | `mixtral`, `qwen2_moe`, `qwen3_moe`, `granitemoe`, `olmoe`, `gpt_oss` |
 
-This is worth stating plainly because the interesting engineering is in the
-other case, and that can leave the impression that splitting is normal. It is
-not. A 7B model quantised to four bits is about four gigabytes and runs on a
-laptop. Most deployments never split anything.
+The name is `model_type` in the model's `config.json`. **Proven** means this:
+a model of each family, computed by the product whole, cut in two and cut in
+three, gives the logits transformers' own code gives, to float32 rounding, at
+every step of a prompt longer than its sliding window and of the decoding after
+it. That comparison is a test the product carries, and the package build runs
+it again with the libraries it ships and refuses to build if one family
+disagrees.
+
+**Any other architecture is refused** for serving, evaluation and distillation,
+with its name and the verified list, rather than computed and possibly wrong.
+Its GGUF build is served whole. It can still be fine-tuned, which uses
+transformers' own code.
+
+::: warning Corrected in 1.3.3
+Until 1.3.3 the list was longer, and five of its families were computed
+**wrongly** on the reference backend, whole and split, with no warning: Granite,
+Granite MoE, Gemma, Gemma 2 and Cohere. Each applies a scaling outside its
+layers that the product's slice left out, and a real Granite answered fluent
+nonsense. They are correct and proven since 1.3.3; answers, evaluation scores
+and distillation labels produced with them on the reference backend before it
+should be produced again. GGUF builds, on llama.cpp, were not affected.
+:::
 
 ## Splitting across machines
 
-When no single machine can hold the model, the coordinator can cut it into
-slices, one per machine, connected as a pipeline. That path has two conditions,
-and both are checked before anything is downloaded.
+When no single machine can hold the model, and you allow it with
+`--allow-split`, the coordinator cuts it into slices, one per machine, connected
+as a pipeline. `--nodes N --allow-split` asks for a pipeline across exactly N
+machines even when one would hold it; `--nodes N` alone is refused, naming the
+missing flag.
 
-### Condition one: safetensors
+**A GGUF file is never split, on any number of machines.** The reason is
+mechanical rather than a policy: llama.cpp loads a model file as a whole, and a
+slice of a GGUF is not a GGUF. Asked to split one, the product refuses with the
+format as the reason, first and alone. If you need that model across a pool,
+take the publisher's safetensors instead.
 
-**A GGUF file is never split, on any number of machines.**
-
-The reason is mechanical rather than a policy. Splitting means one machine holds
-layers 0 to 19 and another holds 20 to 39, and each loads only its own tensors.
-The fast backend that executes GGUF loads a model file as a whole; it has no
-notion of a partial model, and a slice of a GGUF is not a GGUF. Handing it one
-would not produce a degraded model, it would produce an error.
-
-So a GGUF too large for any single machine is refused, and the refusal says
-this rather than suggesting more machines would help. If you need that model
-across a pool, take the publisher's safetensors instead.
-
-### Condition two: a layout that has been verified
-
-Cutting a model at a layer boundary is only correct if a layer boundary is a
-clean cut. Two families are known to be:
-
-| Layout | Split | Why |
-|---|---|---|
-| **Dense homogeneous stack** | yes | every layer has the same shape, and nothing crosses a boundary except the hidden state |
-| **Mixture of experts, stacked** | yes, with all of a layer's experts on one machine | the router runs inside the layer that owns it, so a whole layer is still a clean cut |
-| **Anything else** | no | it is served whole, and split is refused by name |
-
-The third row is the honest one. An architecture this build has not verified is
-not split, whether or not it looks like it should be. That includes hybrid
-stacks that interleave state-space layers with attention: a boundary that
-carries recurrent state is not a boundary, and a model split there loads, runs
-at full speed and produces nonsense. Serving it whole is always available.
-
-The refusal names the architecture and says it is served whole rather than
-implying the model is unsupported.
+**A safetensors model splits if its architecture is on the list above**, dense
+or mixture of experts. A layer boundary is a clean cut for all of them: nothing
+crosses it but the hidden state, and a mixture of experts keeps all of a layer's
+experts on one machine, since the router runs inside the layer that owns it.
+Hybrid stacks that interleave state-space layers with attention are not on the
+list: a boundary that carries recurrent state is not a boundary.
 
 ## What happens when a model is refused
 
@@ -108,8 +109,10 @@ Two routes, and they are equally supported.
 
 **A built-in catalogue** of models this build knows by name. Every entry points
 at the model publisher's own repository on Hugging Face, never a third party's
-conversion, and every entry was downloaded, checked against its digest, parsed,
-loaded and made to answer before it was written down. The catalogue is compiled
+conversion, and every entry was downloaded, checked against its digest, loaded
+by the backend the node package ships and **made to answer correctly** before it
+was written down: "What is the capital of France?" must answer Paris. Generating
+tokens is not enough, since a model computed wrongly generates fluent nonsense. The catalogue is compiled
 into the binary, so `model list --available` works on a machine with no route
 out.
 
@@ -164,11 +167,12 @@ representative hardware, with the hardware named.
 
 | Situation | Result |
 |---|---|
-| Fits on one machine, any architecture, any format | **Runs**, whole |
-| Too large, safetensors, dense stack | **Runs**, split by layer |
-| Too large, safetensors, stacked mixture of experts | **Runs**, split by layer, experts of a layer kept together |
-| Too large, safetensors, unverified layout | **Refused for splitting**, served whole if it fits somewhere |
-| Too large, GGUF, any pool size | **Refused**, and the message says the format is the reason |
-| Fine-tuning, safetensors | **Supported** |
+| GGUF, fits on one machine | **Runs**, whole, on llama.cpp |
+| GGUF, too large for any machine, or asked to split | **Refused**, the format given as the reason |
+| Safetensors, a proven architecture, fits on one machine | **Runs**, whole |
+| Safetensors, a proven architecture, too large, `--allow-split` | **Runs**, split by layer, experts of a layer kept together |
+| Safetensors, any other architecture | **Refused** for serving, evaluation and distillation, before anything is fetched; its GGUF build runs whole |
+| `--nodes N` without `--allow-split` | **Refused**, naming the flag |
+| Fine-tuning, safetensors | **Supported**; training runs transformers' own code, not the product's slice |
 | Fine-tuning, GGUF | **Refused at creation**, with how to obtain trainable weights |
-| Distillation, safetensors student | **Supported**, quantised teacher is fine |
+| Distillation | **Supported** with a safetensors student; a quantised teacher is fine, a safetensors teacher must be a proven architecture |

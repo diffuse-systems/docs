@@ -79,16 +79,21 @@ names the key it is filed under. `model list` shows both columns.
 **401** `invalid_api_key`: no key, or one that is not recognised. Keys are shown
 once and stored hashed, so a lost key is reissued rather than recovered.
 
-**403** `insufficient_scope`: a valid key, outside its scope. Re-sending it will
+**403** `model_not_permitted`: a valid key, outside its scope. Re-sending it will
 not help, which is why this is 403 and not 401.
 
 **404** `model_not_found`: check `GET /v1/models`. If an adapter is merged, the
 name is `<model>-<adapter>` and the base name alone stops resolving, so that a
 request cannot be ambiguous about which weights answered.
 
-**503** `node_unavailable`: a machine holding a slice could not load it or has
-gone. The message names the machine, and `nodes --wide` shows the identical
-line.
+**503** `node_unavailable`, `model_unavailable`, `model_loading`, and **502**
+`generation_interrupted`: a machine the model needs is away, restarting,
+unreachable, still loading, removed, or stopped partway. The message says which
+and whether retrying helps, and names no machine, address or command: those are
+under the `Reference: chatcmpl-…` it ends with, in the api's journal
+(`journalctl -u diffuse-api`) and on the audit trail. `deployment list` says
+what each machine of the deployment is doing and prints the line that places
+the model again when one will not come back.
 
 ## A training run fails
 

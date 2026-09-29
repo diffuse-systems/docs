@@ -46,7 +46,7 @@ the file, the licence the source declared, who ran the command and when.
 
 Every entry points at the model publisher's own repository, never a third
 party's conversion, and every entry was downloaded, verified against its digest,
-loaded and made to generate before it was written down. Sixteen models at
+loaded and made to answer a question correctly before it was written down. Sixteen models at
 present, from about 490 MB to 9 GB, including one mixture of experts.
 
 The catalogue is compiled in rather than fetched, which is three decisions at

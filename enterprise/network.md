@@ -58,20 +58,7 @@ install after `apt purge`. An upgrade leaves the firewall exactly as you left
 it, so enrolment you closed stays closed; if a port the version expects open is
 shut, the upgrade says so and gives the command.
 
-## Refusing it
-
-Install with `DIFFUSE_NO_FIREWALL=1`, on either package, and the firewall is
-left alone:
-
-```bash
-sudo DIFFUSE_NO_FIREWALL=1 apt-get install ./diffuse-coordinator_amd64.deb
-sudo DIFFUSE_NO_FIREWALL=1 apt-get install ./diffuse-node-agent_cpu_amd64.deb
-```
-
-The ports are still listed, and on the coordinator the decision is on the audit
-trail.
-
-## Who the rules let in
+## The default: the machine's local networks only
 
 **The private networks the machine is on, read from its interfaces when the
 rules are written, and nothing else:** `10.0.0.0/8`, `172.16.0.0/12`,
@@ -84,41 +71,80 @@ a private network too.
 7443  control plane: heartbeats and slices, mTLS         from 192.168.178.0/24 (wlan0)
 ```
 
-**Letting in more is named out loud:**
+## Widening or narrowing: `--from`, and `DIFFUSE_FIREWALL_FROM` at install
 
-```bash
-# a network behind a router, besides the ones the machine is on
-sudo diffuse-coordinator firewall open --from local,10.20.0.0/16
+`firewall open --from` takes `local`, a network, or `any`, alone or separated by
+commas; at install the same words go in `DIFFUSE_FIREWALL_FROM`. The choice is
+remembered, so a later `firewall open` without `--from` keeps it.
 
-# public addresses, as some university networks use
-sudo diffuse-coordinator firewall open --from 141.20.0.0/16
-
-# every source; on a machine with a public interface, the Internet
-sudo diffuse-coordinator firewall open --from any
-```
-
-The node agent takes the same `--from`, and at install the same words go in
-`DIFFUSE_FIREWALL_FROM`. The choice is remembered, so a later `firewall open`
-keeps it. The rules this product removes are only the ones it wrote, never one of
-yours.
-
-## When a machine changes network
-
-The rules name networks and the coordinator's certificate names addresses. A new
-address on the same network changes no rule, but a node that registered at the
-coordinator's old address no longer finds it: a DHCP reservation for the
-coordinator avoids all of this. When a machine moves anyway, `firewall status`
-says what no longer matches, and nothing is put right by itself:
+| `--from` | Lets in | Choose it when | What it exposes |
+|---|---|---|---|
+| `local` (the default) | the private networks the machine is on | coordinator and nodes share one local network: the standard deployment | your local network, nothing beyond it |
+| `local,10.20.0.0/16` | those, and one more network | some machines, or the applications calling the API, are behind a router: another building, a VPN | that network too |
+| `10.20.0.0/16` | **only** that network | narrowing: a machine on several networks where only one should reach Diffuse | that network only, not the machine's other local networks |
+| `141.20.0.0/16` | a public network you name | a university network with public addresses | that network |
+| `any` | every source | you filter elsewhere, in front of the machine | **on a machine with a public address, the Internet**: 8443 and 7446 to anyone, 7444 accepting join tokens from anyone, 7443 and 7445 to anyone's TLS handshake. Each still needs its key, account, token or certificate, but the ports can be scanned and flooded |
 
 ```bash
 # on the coordinator's machine
-sudo diffuse-coordinator firewall open
-sudo diffuse-coordinator certificate renew
+sudo diffuse-coordinator firewall open --from local
+sudo diffuse-coordinator firewall open --from local,10.20.0.0/16
+sudo diffuse-coordinator firewall open --from 10.20.0.0/16
+sudo diffuse-coordinator firewall open --from any
+
+# on a machine that computes: the same words
+sudo diffuse-node-agent firewall open --from local
+sudo diffuse-node-agent firewall open --from local,10.20.0.0/16
+
+# at install, before any rule exists
+sudo DIFFUSE_FIREWALL_FROM=local,10.20.0.0/16 apt-get install ./diffuse-coordinator_amd64.deb
+sudo DIFFUSE_FIREWALL_FROM=10.20.0.0/16 apt-get install ./diffuse-node-agent_cpu_amd64.deb
+```
+
+The rules the product removes are only the ones it wrote, never one of yours.
+
+## Refusing it all: `DIFFUSE_NO_FIREWALL=1`
+
+Install with `DIFFUSE_NO_FIREWALL=1`, on either package, and the firewall is
+left alone:
+
+```bash
+sudo DIFFUSE_NO_FIREWALL=1 apt-get install ./diffuse-coordinator_amd64.deb
+sudo DIFFUSE_NO_FIREWALL=1 apt-get install ./diffuse-node-agent_cpu_amd64.deb
+```
+
+The ports are still listed with the commands that would open them, and on the
+coordinator the decision is on the audit trail.
+
+## The commands, on each machine
+
+| Command | Coordinator | Machine that computes | What it does |
+|---|---|---|---|
+| `firewall status` | `sudo diffuse-coordinator firewall status` | `sudo diffuse-node-agent firewall status` | every port, open or not, from where, and the command that would change it; changes nothing |
+| `firewall open [--from …]` | `sudo diffuse-coordinator firewall open` | `sudo diffuse-node-agent firewall open` | puts the rules right for the networks the machine is on now; adds before it removes, and removes only the product's own rules |
+| `firewall close-enrolment` | `sudo diffuse-coordinator firewall close-enrolment` | none: a machine that computes has no enrolment port | removes every rule for 7444, and records it on the audit trail |
+
+## When a machine changes network or address
+
+The rules name networks and the coordinator's certificate names addresses. A new
+address on the same network changes no rule, but a node that registered at the
+coordinator's old address no longer finds it. **Give the coordinator a fixed
+address, a DHCP reservation in the router**, and none of this is needed for it.
+A machine that computes announces the address it had when its agent started:
+after its address changes, restart its agent, or give it a reservation too. When
+a machine moves to another network, `firewall status` says what no longer
+matches, and nothing is put right by itself:
+
+```bash
+# on the coordinator's machine
+sudo diffuse-coordinator firewall open        # the rules, for the networks it is on now
+sudo diffuse-coordinator certificate renew    # its certificate, for the addresses it has now
 
 # on each machine that computes
 sudo diffuse-node-agent firewall open
 # on one that registered at the coordinator's old address
 sudo diffuse-node-agent config set-coordinator https://<the new address>:7443
+# then, so that it announces its own new address
 sudo systemctl restart diffuse-node-agent
 ```
 
@@ -169,15 +195,28 @@ require it refuse the opening with `DIFFUSE_NO_FIREWALL=1` until it does.
 ## When a node's data port is shut
 
 A node whose 7445 is shut enrols and shows as healthy, because every connection
-it makes is outbound. It fails when it is first asked to serve, and the request
-says so, naming the machine and the port:
+it makes is outbound. It fails when it is first asked to serve. **The developer
+calling the API is told what happened and whether to retry, never an address or
+a command:**
 
 ```
-503 node_unavailable: the machine holding "qwen2.5-3b" (rechner-02) does not answer
-on port 7445: something on the way, most likely the firewall on rechner-02, drops
-the connection. [...] The operator opens it on rechner-02 with
-`sudo diffuse-node-agent firewall open`.
+503 node_unavailable: "qwen2.5-3b" is served by a machine this server cannot reach:
+the network between them does not let the connection through. This is a fault on
+the server, not in your request, and retrying will not help until the operator
+corrects it. Reference: chatcmpl-….
 ```
+
+**The operator finds the machine, the address, the port and the command** under
+that reference, in the api's journal and on the audit trail:
+
+```bash
+sudo journalctl -u diffuse-api | grep chatcmpl-…
+sudo diffuse-coordinator audit --action inference
+```
+
+A machine that is switched off is told apart: the caller reads that it is not
+connected and to retry in a minute, because it answers again the moment it is
+back.
 
 ## Enrolment: open by default, closed once the park is built
 
@@ -220,12 +259,40 @@ makes no sense: the API is the product.
 
 ## Checking two real computers
 
-The installation guide carries a line-by-line checklist for two machines on one
-network, with the command on each side and the expected result at each line:
-install, enrol by address, serve on the second machine, reboot both, and the
-same request answering. It is what the release tests prove in containers, to run
-on real hardware, along with a coordinator that has a public interface and a
-move to another network.
+What the release tests prove in containers, to run on two real machines. **A**
+is the coordinator, **B** the node; both have a firewall on with a DROP policy
+(`sudo ufw enable`). Replace `A` and `B` by the machines' names or addresses.
+
+| # | Where | Command | Expected |
+|---|---|---|---|
+| 1 | B | `nc -zv -w 4 A 7443` | times out: A's firewall drops it (the control) |
+| 2 | A | `sudo apt install ./diffuse-coordinator_amd64.deb` | the ports table: 7443, 7444, 7446, 8443 each `from <A's network>`, and the `ufw allow from ...` commands it ran |
+| 3 | A | `sudo ufw status` | the four ports `ALLOW` from A's network, **never `Anywhere`** |
+| 4 | A | `sudo diffuse-coordinator licence set licence` | the licence, the console address, and the same four ports |
+| 5 | B | `nc -zv -w 4 A 7444` | `succeeded` |
+| 6 | B | `sudo apt install ./diffuse-node-agent_cpu_amd64.deb` | `7445 ... from <B's network>` and the rule it ran |
+| 7 | A | `sudo diffuse-coordinator token create --pool wifi --max-uses 1 --ttl 1h` | a `DFE1-...` token, and A's address |
+| 8 | B | `sudo diffuse-node-agent enroll --endpoint https://<A's address>:7444 --token DFE1-...` | `This node is in the pool.`, with no name service needed |
+| 9 | B | `systemctl is-enabled diffuse-node-agent` | `enabled` |
+| 10 | A | `sudo diffuse-coordinator nodes` | B `healthy` |
+| 11 | A | `sudo diffuse-coordinator model pull qwen2.5:0.5b` | the download, with its percentage |
+| 12 | A | `sudo diffuse-coordinator model serve qwen2.5-0.5b --pool wifi` | a slice on B |
+| 13 | A | `sudo diffuse-coordinator apikey create --name check` | a `dfe_sk_...` key |
+| 14 | A | a chat request to `https://127.0.0.1:8443/v1/chat/completions` asking "What is the capital of France? Answer with one word." | `Paris` |
+| 15 | both | `sudo reboot` | nothing else typed until 18 |
+| 16 | A | `sudo ufw status`, `systemctl is-active diffuse-coordinator diffuse-api` | the four rules; `active` twice |
+| 17 | B | `sudo ufw status`, `systemctl is-active diffuse-node-agent` | the 7445 rule; `active` |
+| 18 | A | `sudo diffuse-coordinator nodes`, then the request of 14 | B `healthy` within two minutes; `Paris` again |
+| 19 | B | `sudo ufw delete allow from <B's network> to any port 7445 proto tcp && sudo systemctl restart diffuse-node-agent` | the break, on purpose |
+| 20 | A | the request of 14 | `503`, no address and no command in it, and a `Reference: chatcmpl-…` |
+| 21 | A | `sudo journalctl -u diffuse-api \| grep <that reference>` | B's name, its address, port 7445, and `sudo diffuse-node-agent firewall open` |
+| 22 | B | `sudo diffuse-node-agent firewall open` | the rule is back; the request of 14 answers again |
+
+On firewalld, read `sudo firewall-cmd --list-rich-rules` where the table says
+`sudo ufw status`. When A has a public address, one more line proves the rules
+do not reach beyond your network: from outside it, `nc -zv -w 4 <A's public
+address> 8443` times out. The installation guide carries the same table with the
+full commands.
 
 ---
 

@@ -102,19 +102,28 @@ adapter answers as `<model>-<adapter>` and not under the base name.
 
 | HTTP | `code` | Means |
 |---|---|---|
-| 400 | `invalid_request_error` | the request is malformed; the message says which field |
+| 400 | `unsupported_parameter`, `empty_messages`, `invalid_request` and the document codes | the request is malformed; the message says which field |
 | 401 | `invalid_api_key` | no key, or a key that is not recognised |
-| 403 | `insufficient_scope` | a valid key, outside its scope. Re-sending will not help |
+| 401 | `api_key_expired` | it expired on the date given; the operator issues a new one |
+| 403 | `model_not_permitted` | a valid key, outside its scope. Re-sending will not help |
+| 403 | `licence_expired` | the deployment's licence; the operator's to renew |
 | 404 | `model_not_found` | nothing of that name is served. `GET /v1/models` lists what is |
-| 413 | `context_length_exceeded` | the prompt is longer than the deployment's context |
 | 429 | `rate_limit_exceeded` | this key's limit. `Retry-After` says when |
-| 503 | `node_unavailable` | a machine holding a slice could not load or has gone. The message names it |
-| 503 | `no_capacity` | every slot is busy. Not a fault |
-| 500 | `server_error` | a fault on our side, with what was reported |
+| 429 | `capacity` | every machine is busy. Not a fault |
+| 502 | `generation_interrupted` | the machine computing the answer stopped partway; retry the request |
+| 503 | `model_loading` | still loading; retry in a few seconds |
+| 503 | `node_unavailable` | a machine the model needs is away, restarting or unreachable; the message says whether to retry |
+| 503 | `model_unavailable` | not served until the operator acts: a machine was removed or could not load it |
+| 503 | `coordinator_unavailable` | the api cannot reach its coordinator; retry in a few seconds |
+| 504 | `timeout` | the generation ran past the deployment's limit |
+| 500 | `server_error` | a fault on our side, with a reference |
 
-A 503 naming a node is the same sentence an operator sees under
-`nodes --wide`. That is on purpose: when a developer forwards the error, the
-operator recognises it.
+`docs/API.md` in the product is the complete list.
+
+**No error names a machine, an address or a command.** Each ends with
+`Reference: chatcmpl-…`: a developer forwards it, and the operator finds the
+machine, the port, the cause and the command under it, in the api's journal and
+on the audit trail.
 
 ## Files
 

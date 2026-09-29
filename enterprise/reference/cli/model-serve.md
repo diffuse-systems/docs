@@ -26,9 +26,9 @@ diffuse-coordinator model serve <MODEL_KEY> [OPTIONS]
 | `--cert` | `<CERT>` | `$DIFFUSE_CERT` | This process's certificate chain (PEM) |
 | `--key` | `<KEY>` | `$DIFFUSE_KEY` | This process's private key (PEM) |
 | `--pool` | `<POOL>` | - | Which pool to draw nodes from. Every healthy node by default |
-| `--nodes` | `<NODES>` | `0` | How many nodes to split across, when splitting is the answer |
+| `--nodes` | `<NODES>` | `0` | Split across exactly this many machines, as a pipeline |
 | `--context` | `<CONTEXT>` | `0` | Context the memory estimate is made against |
-| `--allow-split` | flag | - | Permit the pipeline fallback when no single machine holds the model |
+| `--allow-split` | flag | - | Permit a pipeline: across `--nodes` machines when given, and otherwise as the fallback when no single machine holds the model |
 
 ## Notes
 
