@@ -54,13 +54,16 @@ is low, raise `--top-k`; the run says so rather than leaving you to work it out.
 ### 5. If the training stage fails, do not label again
 
 ```bash
-diffuse-coordinator distill --labelled-dataset berichte-labelled \\
+diffuse-coordinator distill --labelled-dataset berichte-labelled \
   --teacher qwen2.5-3b --student qwen2.5-0.5b --as berichte-klein berichte.jsonl
 ```
 
 `--labelled-dataset` skips the teacher entirely. Labelling is the expensive
 half, hours of a served model's time, and this is what the refusal after a
-failed training stage tells you to run.
+failed training stage tells you to run. It is also what a distillation says
+when its training stage could not start, because no machine had the memory for
+the student when the labelling ended: the distillation fails there and keeps
+the corpus (since 1.3.3; before, it waited for a machine for ever).
 
 ### 6. Compare the two
 
