@@ -98,7 +98,7 @@ is why the console signs you out and says so rather than leaving you on a page
 that no longer works.
 
 ```bash
-diffuse-coordinator sessions          # who is signed in, from where, since when
+diffuse-coordinator session list      # who is signed in, from where, since when
 diffuse-coordinator account disable alice
 ```
 

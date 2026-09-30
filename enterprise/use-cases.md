@@ -66,7 +66,7 @@ people who may read the audit trail. API keys scoped per application, expiring.
 
 ```bash
 diffuse-coordinator apikey create --name claims-drafting \
-     --scope-models qwen2.5-7b-instruct --expires 90d
+     --model qwen2.5-7b-instruct --expires 90d
 ```
 
 **What decides it.** Sovereignty as a contractual fact rather than a promise:

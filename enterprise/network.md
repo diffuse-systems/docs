@@ -143,7 +143,7 @@ sudo diffuse-coordinator certificate renew    # its certificate, for the address
 # on each machine that computes
 sudo diffuse-node-agent firewall open
 # on one that registered at the coordinator's old address
-sudo diffuse-node-agent config set-coordinator https://<the new address>:7443
+sudo diffuse-node-agent config set-coordinator https://192.168.20.5:7443
 # then, so that it announces its own new address
 sudo systemctl restart diffuse-node-agent
 ```
@@ -159,7 +159,7 @@ address. On a network that does not resolve the coordinator's name, enrol by its
 address, which `token create` prints:
 
 ```bash
-sudo diffuse-node-agent enroll --endpoint https://192.168.178.20:7444 --token <the token>
+sudo diffuse-node-agent enroll --endpoint https://192.168.178.20:7444 --token DFE1-7QW2M4ZP-...
 ```
 
 The coordinator's certificate names every address on its interfaces, so the

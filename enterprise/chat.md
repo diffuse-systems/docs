@@ -245,12 +245,12 @@ machine; and it can be rotated with an overlap, so replacing it is not an
 outage:
 
 ```bash
-# on the coordinator host
-diffuse-coordinator apikey rotate <handle> --overlap 24h
+# on the coordinator host, with the handle `apikey list` shows for it
+diffuse-coordinator apikey rotate 4KPFWJV8 --overlap 24h
 ```
 
 Every request it makes is on the audit trail with the person in `actor` and the
-credential in `via`, so `diffuse-coordinator audit --via <handle>` reads back
+credential in `via`, so `diffuse-coordinator audit --via 4KPFWJV8` reads back
 every account it ever spoke for. That is detection rather than prevention, and
 it is the answer to "what did this credential do" on the day somebody asks.
 
@@ -311,8 +311,8 @@ Fixing that in the interface would mean patching LibreChat, which this product
 does not do. The operator's answer is one command, on the coordinator:
 
 ```bash
-# on the coordinator host
-diffuse-coordinator audit --via <gateway-handle> --result denied
+# on the coordinator host, with the gateway credential's handle
+diffuse-coordinator audit --via 4KPFWJV8 --result denied
 ```
 
 Every refused assertion is on that trail, naming the identity that was

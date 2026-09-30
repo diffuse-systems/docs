@@ -20,10 +20,12 @@ If the weights are already yours, an export, an audited directory, use
 ### 2. Import the corpus
 
 ```bash
-diffuse-coordinator dataset import --from berichte.jsonl --as berichte
+diffuse-coordinator dataset import --from berichte.jsonl --as berichte --classification internal
 ```
 
-[`dataset import`](./reference/cli/dataset-import.md). The format is above.
+[`dataset import`](./reference/cli/dataset-import.md) needs `--classification`:
+what the data is, in your organisation's own words, which the product records
+rather than guesses. The format is above.
 [`dataset list`](./reference/cli/dataset-list.md) confirms how many examples it
 read: check that number before spending a night on a run.
 
@@ -76,13 +78,14 @@ endpoint then answers to that name like any other model.
 
 ```bash
 diffuse-coordinator adapter list
-diffuse-coordinator adapter export berichte-v1 --to ./berichte-v1.tar.gz
+diffuse-coordinator adapter export berichte-v1 --out ./berichte-v1
 ```
 
 [`adapter list`](./reference/cli/adapter-list.md) carries each adapter's
 provenance: base, rank, corpus size, final loss, the job that made it.
-[`adapter export`](./reference/cli/adapter-export.md) works whatever the licence
-says: the adapter is yours, trained on your corpus, on your machines.
+[`adapter export`](./reference/cli/adapter-export.md) writes the adapter's two
+files into that directory, in the layout PEFT reads, and works whatever the
+licence says: the adapter is yours, trained on your corpus, on your machines.
 
 ## The corpus
 

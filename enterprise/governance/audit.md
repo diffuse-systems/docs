@@ -12,7 +12,7 @@ issuance, job creation, licence installation, sign-ins and failed sign-ins.
 ```bash
 diffuse-coordinator audit --limit 50
 diffuse-coordinator audit --actor alice --since 7d
-diffuse-coordinator audit --outcome refused
+diffuse-coordinator audit --result denied
 ```
 
 Refusals are recorded as deliberately as successes. An audit trail that only
