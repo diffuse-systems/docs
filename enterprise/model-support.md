@@ -45,10 +45,11 @@ it. That comparison is a test the product carries, and the package build runs
 it again with the libraries it ships and refuses to build if one family
 disagrees.
 
-**Any other architecture is refused** for serving, evaluation and distillation,
-with its name and the verified list, rather than computed and possibly wrong.
-Its GGUF build is served whole. It can still be fine-tuned, which uses
-transformers' own code.
+**Any other architecture is refused** for serving, for evaluation, as a
+distillation's teacher, and as its student when the run ends by evaluating it
+(`--eval-suite`), with its name and the verified list, rather than computed and
+possibly wrong. Its GGUF build is served whole. It can still be fine-tuned, and
+be a student without `--eval-suite`: transformers' own code does the training.
 
 ::: warning Corrected in 1.3.3
 Until 1.3.3 the list was longer, and five of its families were computed

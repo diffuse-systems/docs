@@ -60,8 +60,11 @@ Applying the publisher rule strictly leaves models out, and the reasons differ.
 Some publishers ship safetensors only, so there is no official quantised file to
 point at. Google's Gemma is published in GGUF and is gated, and this product
 never authenticates to a hub, so a name for it would be a name that always
-fails. Those models reach a deployment through `model import --from`, with the
-same verification, once you have accepted whatever terms they carry.
+fails. Those models reach a deployment through `model import --from`, once you
+have accepted whatever terms they carry. The file is checked, indexed and
+recorded as a download is; what it does not get is the catalogue's test that
+the model answers correctly, so ask it a question you know the answer to before
+anyone relies on it.
 
 ## Placement
 
