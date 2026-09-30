@@ -1,26 +1,27 @@
 # Distillation
 
-A large model teaches a small one. The corpus needs no answers in it.
+A large model teaches a small one. The teacher scores the answers your corpus
+already has, and the student learns from those scores.
 
 ## The whole path, command by command
 
 Every step links to its reference page, which lists every flag that step takes.
 
-### 1. Serve the teacher
+### 1. Get the teacher onto the deployment
 
-The teacher has to be **running**: distillation asks it for its own answers.
+It does **not** need serving: the labelling stage loads it on a machine of the
+pool, scores your corpus with it, and lets it go.
 
 ```bash
 diffuse-coordinator model pull Qwen/Qwen2.5-3B-Instruct --as qwen2.5-3b
-diffuse-coordinator model serve qwen2.5-3b --pool lab
 ```
 
-[`model pull`](./reference/cli/model-pull.md),
-[`model serve`](./reference/cli/model-serve.md).
+[`model pull`](./reference/cli/model-pull.md).
 
 ### 2. Get the student onto the deployment
 
-It does **not** need serving: it is about to be trained.
+Nor does the student: it is about to be trained. It must have the teacher's
+vocabulary, which Qwen2.5 0.5B and 3B share.
 
 ```bash
 diffuse-coordinator model pull Qwen/Qwen2.5-0.5B-Instruct --as qwen2.5-0.5b
@@ -32,24 +33,32 @@ diffuse-coordinator model pull Qwen/Qwen2.5-0.5B-Instruct --as qwen2.5-0.5b
 diffuse-coordinator distill \
   --teacher qwen2.5-3b \
   --student qwen2.5-0.5b \
-  --data questions.jsonl \
-  --as berichte-klein
+  --as berichte-klein \
+  berichte.jsonl
 ```
 
 [`distill`](./reference/cli/distill.md) does both stages: it labels the corpus
-by scoring your answers with the teacher, then trains the student on those scores. The
-flags worth knowing before a long run are `--top-k`, `--temperature` and
-`--alpha`, and the reference page says what each one costs.
+by scoring your answers with the teacher, then trains the student on those
+scores. Every line of `berichte.jsonl` needs an answer, see
+[the corpus](#the-corpus). The flags worth knowing before a long run are
+`--top-k`, `--temperature` and `--alpha`, and the reference page says what each
+one costs.
 
 ### 4. Watch it
 
+`distill` follows every stage to the end. After a disconnection, find the run
+and follow it again:
+
 ```bash
-diffuse-coordinator job watch 7c31a8
+diffuse-coordinator job list
+diffuse-coordinator job watch distill-7c31a8
 ```
 
-[`job watch`](./reference/cli/job-watch.md). The labelling stage reports the
-**retained mass**: how much of the teacher's probability the top-k kept. If it
-is low, raise `--top-k`; the run says so rather than leaving you to work it out.
+[`job list`](./reference/cli/job-list.md) ·
+[`job watch`](./reference/cli/job-watch.md). The labelling stage measures the
+**retained mass**: how much of the teacher's probability the top-k kept. Below
+70% the run pauses and says which flag to change, rather than leaving you to
+work it out.
 
 ### 5. If the training stage fails, do not label again
 
@@ -67,11 +76,19 @@ the corpus (since 1.3.3; before, it waited for a machine for ever).
 
 ### 6. Compare the two
 
+A suite is a corpus whose lines carry the answer they expect, under `expected`:
+
 ```bash
-diffuse-coordinator eval qwen2.5-0.5b --adapter berichte-klein --suite berichte-test
+diffuse-coordinator dataset import --from berichte-test.jsonl --as berichte-test --format eval --classification internal
+diffuse-coordinator eval berichte-test --model qwen2.5-0.5b+berichte-klein
+diffuse-coordinator eval berichte-test --model qwen2.5-3b
 ```
 
-[`eval`](./reference/cli/eval.md). The question distillation answers is not
+[`dataset import`](./reference/cli/dataset-import.md) ·
+[`eval`](./reference/cli/eval.md) scores the student before and after, side by
+side; the last line scores the teacher on the same rows. `--eval-suite
+berichte-test` at step 3 does all three as a last stage. The question
+distillation answers is not
 "is the student as good as the teacher", it will not be, but "is the student
 good enough on **this** work to be worth what it saves".
 
@@ -86,9 +103,10 @@ exercise: a model that fits on hardware the teacher never would.
 
 ## Why this rather than fine-tuning
 
-Fine-tuning teaches a model from answers you wrote. Distillation teaches it from
-answers a larger model produced, which changes the economics: you supply the
-questions, and the expensive part is a machine's time rather than a person's.
+Fine-tuning teaches a model the answers you wrote, one token at a time.
+Distillation teaches it how a larger model judges those same answers: at every
+position, the teacher's distribution over what could come next, not only the
+token that did. The student learns more from each example.
 
 The result is a small model that behaves more like the large one on the kind of
 input you care about, and that fits on hardware the large one never would.
@@ -121,22 +139,31 @@ you want to run is smaller than the model that answers well.
 sudo diffuse-coordinator distill \
      --teacher qwen2.5-3b-instruct \
      --student qwen2.5-0.5b-instruct \
-     ./questions.jsonl
+     ./berichte.jsonl
 ```
 
-Two stages, both under one `job watch`:
+Two stages, followed to the end:
 
 ```
-  corpus     questions (240 prompts, imported)
-  labels     produced by qwen2.5-3b-instruct; assistant turns in the corpus are ignored
+  corpus     berichte (240 prompts, imported)
+  labels     qwen2.5-3b-instruct scores your answers; it does not write any
+  labels     about 45.0 MiB on disk (240 rows x k=64 x 512 tokens)
+  stage 1/2 labelling  0 of 240
+  […]
+  stage 2/2 training  240 of 240
 
-  stage 1/2 labelling  240 of 240   mass 0.94
-  stage 2/2 training   240 of 240   loss 2.41 -> 0.38
+qwen2.5-0.5b-instruct-berichte distilled from qwen2.5-3b-instruct, at 1/6 of the size
+
+  The labelled corpus is kept as berichte-labelled, and it is the expensive half.
+  Another student learns from it without running qwen2.5-3b-instruct again:
+    diffuse-coordinator distill --teacher qwen2.5-3b-instruct --student <other> \
+      --labelled-dataset berichte-labelled berichte
 ```
 
-**Stage one, labelling.** The teacher runs over the corpus and its output
-distribution is recorded, not just the token it would have picked. This is the
-only stage that runs the large model.
+**Stage one, labelling.** The teacher runs over the corpus and, at every
+position of your answers, its distribution over the next token is recorded, not
+just the token it would have picked. This is the only stage that runs the large
+model.
 
 **Stage two, training.** The student learns from those distributions.
 
@@ -152,13 +179,9 @@ the teacher survives to be learned from, not a dial for how good the result
 will be.** Turning it down does not make the run faster in any way that matters;
 it makes the student imitate a distribution most of which was thrown away.
 
-The number reported beside the labelling stage is the **retained mass**: the
-fraction of the teacher's probability that the kept entries account for,
-averaged over sampled positions.
-
-```
-  stage 1/2 labelling  240 of 240   mass 0.94
-```
+What the labelling stage measures on its first examples is the **retained
+mass**: the fraction of the teacher's probability that the kept entries account
+for, averaged over sampled positions.
 
 At 0.94, the student is learning from 94 per cent of what the teacher thought.
 At 0.09 it is learning from noise with a confident shape, which converges
@@ -167,18 +190,19 @@ beautifully and produces a model that is wrong in a way no loss curve shows.
 Below a floor of 0.70 the run pauses rather than continuing:
 
 ```
-k=16 retains 9% of the teacher's probability mass at T=1 (9% at the 5th
-percentile), measured on 240 examples of this corpus. The floor is 70%.
-Storing only that much of the teacher means the student is asked to imitate a
-distribution most of which was thrown away: the cost is exactly
--log(0.086) = 2.46 nats, and it does not go away later in the run.
+k=16 retains 9% of qwen2.5-3b-instruct's probability mass at T=1 (9% at the 5th
+percentile), measured on 240 examples of this corpus. The floor is 70%. Storing
+only that much of the teacher means the student is asked to imitate a
+distribution most of which was thrown away: the cost is exactly -log(0.086) =
+2.46 nats, and it does not go away later in the run.
 
 The run is PAUSED at 240 of 240 examples; what has been labelled is kept, but
 it was written at k=16 and a run at another k must be a new job.
 
 Options:
   • raise the top-k: --top-k 64
-  • lower the temperature
+  • lower the temperature: --temperature 0.7 keeps more mass in the top k, at
+    the price of the teacher's judgement between the tokens it did not choose
   • a teacher that is more certain per token, which usually means a larger one
 ```
 
@@ -231,7 +255,7 @@ directly and never touches the teacher again:
 
 ```bash
 diffuse-coordinator distill --teacher qwen2.5-3b-instruct \
-     --student qwen3-1.7b --labelled-dataset questions-labelled
+     --student qwen2.5-1.5b-instruct --labelled-dataset berichte-labelled berichte
 ```
 
 Since labelling is the expensive half, this is the difference between an
@@ -262,11 +286,11 @@ untouched student and the trained student on the same rows:
 
 ```bash
 diffuse-coordinator distill --teacher big --student small \
-     ./questions.jsonl --eval-suite acceptance
+     ./berichte.jsonl --eval-suite acceptance
 ```
 
 ```
-exact match     teacher 0.86   student 0.71   base 0.42   on acceptance (120 rows)
+  exact_match   teacher 0.86   student 0.71   base 0.42   on acceptance (120 rows)
 ```
 
 Three numbers rather than two, because "the student improved" and "the student
