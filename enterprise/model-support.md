@@ -14,7 +14,7 @@ Is the model a GGUF file?
 
   NO, safetensors ──> Is its architecture one this build is proven on?
 
-          NO  ──> refused, by name, before anything is fetched;
+          NO  ──> refused, by name, before a machine fetches it;
                   its GGUF build is served whole
           YES ──> whole on one machine that holds it, or, when none
                   does and you allow it, split by layer across machines
@@ -118,9 +118,11 @@ into the binary, so `model list --available` works on a machine with no route
 out.
 
 **Your own files.** `model import --from <path>` takes a directory or a file you
-already have, with the same verification, the same tensor index and the same
-provenance record. An air-gapped site uses this path exclusively, and a model
-whose licence you accepted yourself arrives this way.
+already have, with the checks, the tensor index and the provenance record a
+download gets. What it does not get is the catalogue's test that the model
+answers correctly: ask it a question you know the answer to. An air-gapped site
+uses this path exclusively, and a model whose licence you accepted yourself
+arrives this way.
 
 Neither route makes the product fetch a URL a caller chose. The coordinator
 resolves a catalogue name against its own compiled-in table, which is what makes
@@ -172,8 +174,8 @@ representative hardware, with the hardware named.
 | GGUF, too large for any machine, or asked to split | **Refused**, the format given as the reason |
 | Safetensors, a proven architecture, fits on one machine | **Runs**, whole |
 | Safetensors, a proven architecture, too large, `--allow-split` | **Runs**, split by layer, experts of a layer kept together |
-| Safetensors, any other architecture | **Refused** for serving, evaluation and distillation, before anything is fetched; its GGUF build runs whole |
+| Safetensors, any other architecture | **Refused** for serving, evaluation, as a distillation's teacher and as a student the run evaluates, before a machine fetches it; its GGUF build runs whole |
 | `--nodes N` without `--allow-split` | **Refused**, naming the flag |
 | Fine-tuning, safetensors | **Supported**; training runs transformers' own code, not the product's slice |
 | Fine-tuning, GGUF | **Refused at creation**, with how to obtain trainable weights |
-| Distillation | **Supported** with a safetensors student; a quantised teacher is fine, a safetensors teacher must be a proven architecture |
+| Distillation | **Supported** with a safetensors student, which must be a proven architecture when `--eval-suite` scores it; a quantised teacher is fine, a safetensors teacher must be a proven architecture |
