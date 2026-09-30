@@ -204,6 +204,9 @@ the container** rather than from your shell, that the endpoint accepts the
 credential the way this profile expects, and that the shared agent exists and is
 actually shared.
 
+Every command and option of the script, with these cases as commands to copy,
+is in [the `./diffuse-chat` reference](./reference/chat-cli/index.md).
+
 ## Your own branding
 
 `APP_TITLE` and `CUSTOM_FOOTER` are text and live in `.env`. Images go in
