@@ -12,19 +12,13 @@ diffuse-coordinator deployment rm <DEPLOYMENT_ID> [OPTIONS]
 
 ## Arguments
 
-| argument | required | description |
-|---|---|---|
-| `DEPLOYMENT_ID` | yes | The deployment id, as shown by `deployment list` |
+| argument | type | required | description |
+|---|---|---|---|
+| `DEPLOYMENT_ID` | text | yes | The deployment id, as shown by `deployment list` |
 
 ## Options
 
-| flag | value | default | description |
-|---|---|---|---|
-| `--config` | `<CONFIG>` | `$DIFFUSE_COORDINATOR_CONFIG` | Configuration file. Its `[admin]` section says where to connect |
-| `--endpoint` | `<ENDPOINT>` | `$DIFFUSE_COORDINATOR_ENDPOINT` | Coordinator endpoint, e.g. https://coordinator.internal:7443 |
-| `--ca-cert` | `<CA_CERT>` | `$DIFFUSE_CA_CERT` | The deployment CA certificate (PEM) |
-| `--cert` | `<CERT>` | `$DIFFUSE_CERT` | This process's certificate chain (PEM) |
-| `--key` | `<KEY>` | `$DIFFUSE_KEY` | This process's private key (PEM) |
+Only the [connection options](index.md#connection-options).
 
 ## Notes
 
@@ -37,7 +31,7 @@ $ diffuse-coordinator deployment rm qwen2.5-3b-nere9
 ```
 
 ```
-qwen2.5-3b-nere9 torn down. The model is still installed.
+Deployment qwen2.5-3b-nere9 deleted.
 ```
 
 ---

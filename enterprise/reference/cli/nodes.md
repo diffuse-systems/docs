@@ -10,15 +10,12 @@ diffuse-coordinator nodes [OPTIONS]
 
 ## Options
 
-| flag | value | default | description |
+| flag | type | default | description |
 |---|---|---|---|
-| `--wide` | flag | - | Show the policy each node carries and when its certificate expires |
-| `--config` | `<CONFIG>` | `$DIFFUSE_COORDINATOR_CONFIG` | Configuration file. Its `[admin]` section says where to connect |
-| `--endpoint` | `<ENDPOINT>` | `$DIFFUSE_COORDINATOR_ENDPOINT` | Coordinator endpoint, e.g. https://coordinator.internal:7443 |
-| `--output` | `table` \| `json` | `table` | Output format |
-| `--ca-cert` | `<CA_CERT>` | `$DIFFUSE_CA_CERT` | The deployment CA certificate (PEM) |
-| `--cert` | `<CERT>` | `$DIFFUSE_CERT` | This process's certificate chain (PEM) |
-| `--key` | `<KEY>` | `$DIFFUSE_KEY` | This process's private key (PEM) |
+| `--wide` | switch | - | Show the policy each node carries and when its certificate expires |
+| `--output <OUTPUT>` | one of `table`, `json` | `table` | Output format |
+
+And the [connection options](index.md#connection-options).
 
 ## Examples
 

@@ -12,15 +12,15 @@ diffuse-node-agent config set-coordinator <ENDPOINT> [OPTIONS]
 
 ## Arguments
 
-| argument | required | description |
-|---|---|---|
-| `ENDPOINT` | yes | The coordinator's mTLS endpoint, e.g. https://coordinator.internal:7443 |
+| argument | type | required | description |
+|---|---|---|---|
+| `ENDPOINT` | text | yes | The coordinator's mTLS endpoint, e.g. https://coordinator.internal:7443 |
 
 ## Options
 
-| flag | value | default | description |
+| flag | type | default | description |
 |---|---|---|---|
-| `--unchecked` | flag | - | Write the address without checking that anything answers on it |
+| `--unchecked` | switch | - | Write the address without checking that anything answers on it |
 
 ## Notes
 

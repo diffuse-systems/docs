@@ -10,23 +10,20 @@ diffuse-coordinator eval <SUITE_KEY> [OPTIONS]
 
 ## Arguments
 
-| argument | required | description |
-|---|---|---|
-| `SUITE_KEY` | yes | The suite, imported with `dataset import --format eval` |
+| argument | type | required | description |
+|---|---|---|---|
+| `SUITE_KEY` | text | yes | The suite, imported with `dataset import --format eval` |
 
 ## Options
 
-| flag | value | default | description |
+| flag | type | default | description |
 |---|---|---|---|
-| `--config` | `<CONFIG>` | `$DIFFUSE_COORDINATOR_CONFIG` | Configuration file. Its `[admin]` section says where to connect |
-| `--endpoint` | `<ENDPOINT>` | `$DIFFUSE_COORDINATOR_ENDPOINT` | Coordinator endpoint, e.g. https://coordinator.internal:7443 |
-| `--ca-cert` | `<CA_CERT>` | `$DIFFUSE_CA_CERT` | The deployment CA certificate (PEM) |
-| `--cert` | `<CERT>` | `$DIFFUSE_CERT` | This process's certificate chain (PEM) |
-| `--key` | `<KEY>` | `$DIFFUSE_KEY` | This process's private key (PEM) |
-| `--model` | `<MODEL>` | - | What to score: `<model>` or `<model>+<adapter>` |
-| `--pool` | `<POOL>` | - | Which pool to run it in |
-| `--metric` | `<METRIC>` | `exact_match` | How a completion is compared: exact_match or contains |
-| `--max-tokens` | `<MAX_TOKENS>` | `32` | How far to generate before giving up on a row |
+| `--model <MODEL>` | text | - | What to score: `<model>` or `<model>+<adapter>` |
+| `--pool <POOL>` | text | - | Which pool to run it in |
+| `--metric <METRIC>` | text | `exact_match` | How a completion is compared: exact_match or contains |
+| `--max-tokens <MAX_TOKENS>` | integer | `32` | How far to generate before giving up on a row |
+
+And the [connection options](index.md#connection-options).
 
 ## Notes
 
@@ -39,11 +36,14 @@ $ diffuse-coordinator eval berichte-test --model qwen2.5-3b+berichte-v1
 ```
 
 ```
-BASE    +ADAPTER  Δ
-perplexity    14.82   9.31      -37%
-exact match   0.41    0.63      +54%
+  0 of 248 rows
+  124 of 248 rows
+  248 of 248 rows
 
-  248 examples, 3m 12s, rechner-01
+qwen2.5-3b+berichte-v1 vs qwen2.5-3b   on berichte-test (124 rows)
+
+  exact_match   base 0.41   tuned 0.63   +0.22
+  evaluated in 3m11s on rechner-01
 ```
 
 ---

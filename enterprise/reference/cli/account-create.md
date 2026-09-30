@@ -10,21 +10,18 @@ diffuse-coordinator account create <LOGIN> [OPTIONS]
 
 ## Arguments
 
-| argument | required | description |
-|---|---|---|
-| `LOGIN` | yes | The login, as it will appear in the audit trail |
+| argument | type | required | description |
+|---|---|---|---|
+| `LOGIN` | text | yes | The login, as it will appear in the audit trail |
 
 ## Options
 
-| flag | value | default | description |
+| flag | type | default | description |
 |---|---|---|---|
-| `--config` | `<CONFIG>` | `$DIFFUSE_COORDINATOR_CONFIG` | Configuration file. Its `[admin]` section says where to connect |
-| `--endpoint` | `<ENDPOINT>` | `$DIFFUSE_COORDINATOR_ENDPOINT` | Coordinator endpoint, e.g. https://coordinator.internal:7443 |
-| `--ca-cert` | `<CA_CERT>` | `$DIFFUSE_CA_CERT` | The deployment CA certificate (PEM) |
-| `--cert` | `<CERT>` | `$DIFFUSE_CERT` | This process's certificate chain (PEM) |
-| `--key` | `<KEY>` | `$DIFFUSE_KEY` | This process's private key (PEM) |
-| `--name` | `<NAME>` | - | The person's name, for a table an operator reads |
-| `--role` | `<ROLE>` | `developer` | owner, admin, operator, developer or auditor |
+| `--name <NAME>` | text | - | The person's name, for a table an operator reads |
+| `--role <ROLE>` | text | `developer` | owner, admin, operator, developer or auditor |
+
+And the [connection options](index.md#connection-options).
 
 ## Notes
 
@@ -37,9 +34,12 @@ $ diffuse-coordinator account create jonas.pfleger --role developer
 ```
 
 ```
-Account jonas.pfleger created, role developer.
-  one-time password   M4ZP0X9D3TBK7QW2
-  It may only be used to set another one.
+Account jonas.pfleger created (developer).
+
+  one-time password   6HCZERB0KFZ4T761
+
+Hand it over out of band. It works once: the first login with it may only
+change it, and this is the only time it is shown.
 ```
 
 ---

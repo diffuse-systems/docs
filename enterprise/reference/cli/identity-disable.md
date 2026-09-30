@@ -10,19 +10,13 @@ diffuse-coordinator identity disable <SUBJECT> [OPTIONS]
 
 ## Arguments
 
-| argument | required | description |
-|---|---|---|
-| `SUBJECT` | yes | The subject, as shown by `identity list` |
+| argument | type | required | description |
+|---|---|---|---|
+| `SUBJECT` | text | yes | The subject, as shown by `identity list` |
 
 ## Options
 
-| flag | value | default | description |
-|---|---|---|---|
-| `--config` | `<CONFIG>` | `$DIFFUSE_COORDINATOR_CONFIG` | Configuration file. Its `[admin]` section says where to connect |
-| `--endpoint` | `<ENDPOINT>` | `$DIFFUSE_COORDINATOR_ENDPOINT` | Coordinator endpoint, e.g. https://coordinator.internal:7443 |
-| `--ca-cert` | `<CA_CERT>` | `$DIFFUSE_CA_CERT` | The deployment CA certificate (PEM) |
-| `--cert` | `<CERT>` | `$DIFFUSE_CERT` | This process's certificate chain (PEM) |
-| `--key` | `<KEY>` | `$DIFFUSE_KEY` | This process's private key (PEM) |
+Only the [connection options](index.md#connection-options).
 
 ## Examples
 

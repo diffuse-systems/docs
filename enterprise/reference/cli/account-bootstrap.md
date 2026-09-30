@@ -12,12 +12,12 @@ diffuse-coordinator account bootstrap [OPTIONS]
 
 ## Options
 
-| flag | value | default | description |
+| flag | type | default | description |
 |---|---|---|---|
-| `--state-dir` | `<STATE_DIR>` | `$DIFFUSE_STATE_DIR` | The coordinator's state directory |
-| `--config` | `<CONFIG>` | `$DIFFUSE_COORDINATOR_CONFIG` | Configuration file, read only for its `state_dir` |
-| `--login` | `<LOGIN>` | - | The login of the first owner |
-| `--name` | `<NAME>` | - | Their name |
+| `--state-dir <STATE_DIR>` | path | `$DIFFUSE_STATE_DIR` | The coordinator's state directory |
+| `--config <CONFIG>` | path | `$DIFFUSE_COORDINATOR_CONFIG` | Configuration file, read only for its `state_dir` |
+| `--login <LOGIN>` | text | - | The login of the first owner |
+| `--name <NAME>` | text | - | Their name |
 
 ## Notes
 

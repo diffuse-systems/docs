@@ -14,12 +14,12 @@ diffuse-coordinator firewall open [OPTIONS]
 
 ## Options
 
-| flag | value | default | description |
+| flag | type | default | description |
 |---|---|---|---|
-| `--config` | `<CONFIG>` | - | The coordinator's configuration, read for the ports. Defaults to the packaged one |
-| `--api-env` | `<API_ENV>` | `/etc/diffuse/api.env` | The api's environment file, read for its port |
-| `--from` | `<local|any|NETWORK>` | `$DIFFUSE_FIREWALL_FROM` | Who the rules let in: `local`, the private networks this machine is on, read now (the default); a network, like `10.20.0.0/16`, for machines behind a router or on public addresses; or `any`, every source, which on a machine with a public interface is the Internet |
-| `--at-install` | flag | - | Set by the package: the audit row says the install did it, and `DIFFUSE_NO_FIREWALL` is honoured |
+| `--config <CONFIG>` | path | - | The coordinator's configuration, read for the ports. Defaults to the packaged one |
+| `--api-env <API_ENV>` | path | `/etc/diffuse/api.env` | The api's environment file, read for its port |
+| `--from <local\|any\|NETWORK>` | text | `$DIFFUSE_FIREWALL_FROM` | Who the rules let in: `local`, the private networks this machine is on, read now (the default); a network, like `10.20.0.0/16`, for machines behind a router or on public addresses; or `any`, every source, which on a machine with a public interface is the Internet |
+| `--at-install` | switch | - | Set by the package: the audit row says the install did it, and `DIFFUSE_NO_FIREWALL` is honoured |
 
 ## Notes
 
@@ -32,7 +32,7 @@ $ sudo diffuse-coordinator firewall open
 ```
 
 ```
-The host firewall is ufw. Ports 7443, 7444, 7446 and 8443 are open to the
+  The host firewall is ufw. Ports 7443, 7444, 7446 and 8443 are open to the
   private networks this machine is on, and to nothing else. ufw saves its
   rules, so they are back after a reboot.
   What ran:

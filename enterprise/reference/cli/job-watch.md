@@ -10,38 +10,40 @@ diffuse-coordinator job watch <JOB_ID> [OPTIONS]
 
 ## Arguments
 
-| argument | required | description |
-|---|---|---|
-| `JOB_ID` | yes | The job id, as shown by `job list` |
+| argument | type | required | description |
+|---|---|---|---|
+| `JOB_ID` | text | yes | The job id, as shown by `job list` |
 
 ## Options
 
-| flag | value | default | description |
-|---|---|---|---|
-| `--config` | `<CONFIG>` | `$DIFFUSE_COORDINATOR_CONFIG` | Configuration file. Its `[admin]` section says where to connect |
-| `--endpoint` | `<ENDPOINT>` | `$DIFFUSE_COORDINATOR_ENDPOINT` | Coordinator endpoint, e.g. https://coordinator.internal:7443 |
-| `--ca-cert` | `<CA_CERT>` | `$DIFFUSE_CA_CERT` | The deployment CA certificate (PEM) |
-| `--cert` | `<CERT>` | `$DIFFUSE_CERT` | This process's certificate chain (PEM) |
-| `--key` | `<KEY>` | `$DIFFUSE_KEY` | This process's private key (PEM) |
+Only the [connection options](index.md#connection-options).
 
 ## Notes
 
-Follows a running job until it finishes. Safe to interrupt: the run continues.
+Follows a run until it ends, then says what to do with the result: how to serve it and how to measure it. Safe to interrupt: the run continues.
 
 ## Examples
 
 ```bash
-$ diffuse-coordinator job watch 4f2a9c
+$ diffuse-coordinator job watch job-4f2a9c
 ```
 
 ```
-epoch 1/4  loss 1.94  ██████░░░░░░░░░░░░░░  25%
-  epoch 2/4  loss 1.31  ████████████░░░░░░░░  50%
-  epoch 3/4  loss 1.08  ██████████████████░░  75%
-  epoch 4/4  loss 0.97  ████████████████████ 100%
+queued on rechner-01   0s
+step 2412/9648   loss 2.11 -> 1.402   9m51s
+step 4824/9648   loss 2.11 -> 1.188   19m40s
+step 9648/9648   loss 2.11 -> 0.971   39m22s
 
-finished in 22m 41s. Adapter berichte-v1 is ready.
-  diffuse-coordinator eval qwen2.5-3b --adapter berichte-v1 --suite berichte-test
+Adapter: berichte-v1
+
+Serve it:
+    diffuse-coordinator model serve qwen2.5-3b+berichte-v1
+Then call it as "qwen2.5-3b-berichte-v1" in /v1.
+
+To measure it rather than eyeball it, import a suite and score both sides:
+    diffuse-coordinator dataset import --from <file>.jsonl --format eval \
+        --classification internal
+    diffuse-coordinator eval <suite> --model qwen2.5-3b+berichte-v1
 ```
 
 ---

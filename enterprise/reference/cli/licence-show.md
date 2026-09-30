@@ -10,14 +10,11 @@ diffuse-coordinator licence show [OPTIONS]
 
 ## Options
 
-| flag | value | default | description |
+| flag | type | default | description |
 |---|---|---|---|
-| `--config` | `<CONFIG>` | `$DIFFUSE_COORDINATOR_CONFIG` | Configuration file. Its `[admin]` section says where to connect |
-| `--endpoint` | `<ENDPOINT>` | `$DIFFUSE_COORDINATOR_ENDPOINT` | Coordinator endpoint, e.g. https://coordinator.internal:7443 |
-| `--ca-cert` | `<CA_CERT>` | `$DIFFUSE_CA_CERT` | The deployment CA certificate (PEM) |
-| `--cert` | `<CERT>` | `$DIFFUSE_CERT` | This process's certificate chain (PEM) |
-| `--key` | `<KEY>` | `$DIFFUSE_KEY` | This process's private key (PEM) |
-| `--output` | `table` \| `json` | `table` | Output format |
+| `--output <OUTPUT>` | one of `table`, `json` | `table` | Output format |
+
+And the [connection options](index.md#connection-options).
 
 ## Examples
 
@@ -26,13 +23,14 @@ $ diffuse-coordinator licence show
 ```
 
 ```
-organisation  Klinik Beispiel
-edition       enterprise
-nodes         8 (2 enrolled)
-features      training, distillation, fast-backend, sso
-expires       2027-06-30 00:00:00Z
-grace         30 days after that
-state         live
+  organisation  Klinik Beispiel
+  licence       lic-2027-0142
+  edition       enterprise
+  issued        2026-06-30 09:12:00Z
+  expires       2027-06-30 00:00:00Z  (live)
+  nodes         2 of 8 active
+  features      training, distillation, sso
+  signed by     diffuse-licence-2026a
 ```
 
 ---

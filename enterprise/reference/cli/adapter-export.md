@@ -10,36 +10,32 @@ diffuse-coordinator adapter export <ADAPTER_KEY> [OPTIONS]
 
 ## Arguments
 
-| argument | required | description |
-|---|---|---|
-| `ADAPTER_KEY` | yes | The adapter key, as shown by `adapter list` |
+| argument | type | required | description |
+|---|---|---|---|
+| `ADAPTER_KEY` | text | yes | The adapter key, as shown by `adapter list` |
 
 ## Options
 
-| flag | value | default | description |
+| flag | type | default | description |
 |---|---|---|---|
-| `--config` | `<CONFIG>` | `$DIFFUSE_COORDINATOR_CONFIG` | Configuration file. Its `[admin]` section says where to connect |
-| `--endpoint` | `<ENDPOINT>` | `$DIFFUSE_COORDINATOR_ENDPOINT` | Coordinator endpoint, e.g. https://coordinator.internal:7443 |
-| `--ca-cert` | `<CA_CERT>` | `$DIFFUSE_CA_CERT` | The deployment CA certificate (PEM) |
-| `--cert` | `<CERT>` | `$DIFFUSE_CERT` | This process's certificate chain (PEM) |
-| `--key` | `<KEY>` | `$DIFFUSE_KEY` | This process's private key (PEM) |
-| `--out` | `<OUT>` | `.` | Directory to write `adapter_model.safetensors` and `adapter_config.json` into. What comes out is what `peft` reads, so it loads anywhere |
+| `--out <OUT>` | path | `.` | Directory to write `adapter_model.safetensors` and `adapter_config.json` into. What comes out is what `peft` reads, so it loads anywhere |
+
+And the [connection options](index.md#connection-options).
 
 ## Notes
 
-The adapter is yours: trained on your corpus, on your machines. Export works whatever the licence says.
+The adapter is yours: trained on your corpus, on your machines. Export works whatever the licence says. It writes the adapter's own files into a directory, in the layout PEFT reads.
 
 ## Examples
 
 ```bash
-$ diffuse-coordinator adapter export berichte-v1 --out ./berichte-v1.tar.gz
+$ diffuse-coordinator adapter export berichte-v1 --out /srv/adapters/berichte-v1
 ```
 
 ```
-berichte-v1 exported to ./berichte-v1.tar.gz (84.2 MiB)
-  base       qwen2.5-3b
-  rank       32
-  job        4f2a9c
+Exported berichte-v1 to /srv/adapters/berichte-v1.
+  adapter_model.safetensors  14.2 MiB
+  adapter_config.json  1.1 KiB
 ```
 
 ---

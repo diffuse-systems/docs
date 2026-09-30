@@ -12,27 +12,24 @@ diffuse-coordinator model serve <MODEL_KEY> [OPTIONS]
 
 ## Arguments
 
-| argument | required | description |
-|---|---|---|
-| `MODEL_KEY` | yes | The model key, as shown by `model list` |
+| argument | type | required | description |
+|---|---|---|---|
+| `MODEL_KEY` | text | yes | The model key, as shown by `model list` |
 
 ## Options
 
-| flag | value | default | description |
+| flag | type | default | description |
 |---|---|---|---|
-| `--config` | `<CONFIG>` | `$DIFFUSE_COORDINATOR_CONFIG` | Configuration file. Its `[admin]` section says where to connect |
-| `--endpoint` | `<ENDPOINT>` | `$DIFFUSE_COORDINATOR_ENDPOINT` | Coordinator endpoint, e.g. https://coordinator.internal:7443 |
-| `--ca-cert` | `<CA_CERT>` | `$DIFFUSE_CA_CERT` | The deployment CA certificate (PEM) |
-| `--cert` | `<CERT>` | `$DIFFUSE_CERT` | This process's certificate chain (PEM) |
-| `--key` | `<KEY>` | `$DIFFUSE_KEY` | This process's private key (PEM) |
-| `--pool` | `<POOL>` | - | Which pool to draw nodes from. Every healthy node by default |
-| `--nodes` | `<NODES>` | `0` | Split across exactly this many machines, as a pipeline |
-| `--context` | `<CONTEXT>` | `0` | Context the memory estimate is made against |
-| `--allow-split` | flag | - | Permit a pipeline: across `--nodes` machines when given, and otherwise as the fallback when no single machine holds the model |
+| `--pool <POOL>` | text | - | Which pool to draw nodes from. Every healthy node by default |
+| `--nodes <NODES>` | integer | `0` | Split across exactly this many machines, as a pipeline |
+| `--context <CONTEXT>` | integer | `0` | Context the memory estimate is made against |
+| `--allow-split` | switch | - | Permit a pipeline: across `--nodes` machines when given, and otherwise as the fallback when no single machine holds the model |
+
+And the [connection options](index.md#connection-options).
 
 ## Notes
 
-Places the model across the pool and waits for it to be ready. The slice plan is the coordinator's; you choose the pool and, if you want, how many machines it may use.
+Places the model and returns: each machine fetches its slice on its next heartbeat, and requests are refused until the weights are in place. The slice plan is the coordinator's; you choose the pool and, if you want, a pipeline across a number of machines, `--nodes N --allow-split`.
 
 ## Examples
 
@@ -41,12 +38,33 @@ $ diffuse-coordinator model serve qwen2.5-3b --pool lab
 ```
 
 ```
-planning across pool lab
-  2 slices: rechner-01 layers 0..18, rechner-02 layers 18..36
-  ready in 41s
+Deployed qwen2.5-3b.
 
-qwen2.5-3b is served. Give developers /etc/diffuse/ca.crt and any OpenAI client
-works unchanged against https://coordinator.internal:8443/v1, see API.md.
+  placement   whole (RAM)
+  reason      rechner-01 holds 7.9 GiB (weights 5.8 GiB + KV 288.0 MiB at context 4096 × 4 session(s) + 1.1 GiB overhead, +10% headroom) in RAM (29.1 GiB free)
+  context     4096
+
+  slice 0   layers   0..36   rechner-01         5.8 GiB    whole model
+
+Nodes fetch their slice on the next heartbeat, so requests are refused
+until the weights are in place: seconds for a small model, minutes for
+a large one. `nodes --wide` shows the slice appear.
+
+Call it with this name:
+
+    qwen2.5-3b
+
+A request you can paste, once the slice is loaded and you have a key
+from `apikey create`:
+
+    curl https://coordinator.internal:8443/v1/chat/completions \
+      --cacert /etc/diffuse/ca.crt \
+      -H "Authorization: Bearer $DIFFUSE_API_KEY" \
+      -H "Content-Type: application/json" \
+      -d '{"model":"qwen2.5-3b","messages":[{"role":"user","content":"Hello"}]}'
+
+  Give developers /etc/diffuse/ca.crt and any OpenAI client works
+  unchanged against https://coordinator.internal:8443/v1, see API.md.
 ```
 
 ---

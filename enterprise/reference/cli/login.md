@@ -12,18 +12,18 @@ diffuse-coordinator login [OPTIONS]
 
 ## Options
 
-| flag | value | default | description |
+| flag | type | default | description |
 |---|---|---|---|
-| `--endpoint` | `<ENDPOINT>` | `$DIFFUSE_OPERATOR_ENDPOINT` | The operator plane, e.g. https://coordinator.internal:7446 |
-| `--ca` | `<CA>` | - | The certificate authority that signed the coordinator's certificate |
-| `--login` | `<LOGIN>` | - | The login. Prompted for when absent |
-| `--password` | `<PASSWORD>` | `$DIFFUSE_PASSWORD` | The password |
-| `--sso` | flag | - | Sign in through this deployment's identity provider instead |
-| `--no-browser` | flag | - | Print the sign-in URL rather than opening a browser |
+| `--endpoint <ENDPOINT>` | text | `$DIFFUSE_OPERATOR_ENDPOINT` | The operator plane, e.g. https://coordinator.internal:7446 |
+| `--ca <CA>` | path | - | The certificate authority that signed the coordinator's certificate |
+| `--login <LOGIN>` | text | - | The login. Prompted for when absent |
+| `--password <PASSWORD>` | text | `$DIFFUSE_PASSWORD` | The password |
+| `--sso` | switch | - | Sign in through this deployment's identity provider instead |
+| `--no-browser` | switch | - | Print the sign-in URL rather than opening a browser |
 
 ## Notes
 
-The session lands in a file on this machine and is used by every later command.
+The session lands in a file on this machine, `~/.config/diffuse/session`, and is used by every later command, for twelve hours.
 
 ## Examples
 
@@ -32,10 +32,11 @@ $ diffuse-coordinator login --endpoint https://coordinator.internal:7446
 ```
 
 ```
-login: marie.chercheuse
-password:
-
-Signed in as marie.chercheuse (operator) until 2026-08-27 10:00:00Z.
+Login: marie.chercheuse
+Password:
+Signed in as marie.chercheuse (everything, including accounts, roles and the licence).
+  session until  2026-08-26 22:00:00Z
+  stored in      /home/marie/.config/diffuse/session (mode 0600)
 ```
 
 ---

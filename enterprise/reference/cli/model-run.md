@@ -12,29 +12,26 @@ diffuse-coordinator model run <REFERENCE> [OPTIONS]
 
 ## Arguments
 
-| argument | required | description |
-|---|---|---|
-| `REFERENCE` | yes | A catalogue name (`qwen2.5:7b`), a hub repository, or a model already installed here |
+| argument | type | required | description |
+|---|---|---|---|
+| `REFERENCE` | text | yes | A catalogue name (`qwen2.5:7b`), a hub repository, or a model already installed here |
 
 ## Options
 
-| flag | value | default | description |
+| flag | type | default | description |
 |---|---|---|---|
-| `--config` | `<CONFIG>` | `$DIFFUSE_COORDINATOR_CONFIG` | Configuration file. Its `[admin]` section says where to connect |
-| `--endpoint` | `<ENDPOINT>` | `$DIFFUSE_COORDINATOR_ENDPOINT` | Coordinator endpoint, e.g. https://coordinator.internal:7443 |
-| `--ca-cert` | `<CA_CERT>` | `$DIFFUSE_CA_CERT` | The deployment CA certificate (PEM) |
-| `--cert` | `<CERT>` | `$DIFFUSE_CERT` | This process's certificate chain (PEM) |
-| `--key` | `<KEY>` | `$DIFFUSE_KEY` | This process's private key (PEM) |
-| `--quantization` | `<QUANTIZATION>` | - | Which quantisation to take, when a repository publishes several |
-| `--pool` | `<POOL>` | - | Which pool to draw nodes from. Every healthy node by default |
-| `--nodes` | `<NODES>` | `0` | Split across exactly this many machines, as a pipeline. Needs `--allow-split`: `--nodes` alone is refused, never ignored |
-| `--context` | `<CONTEXT>` | `0` | Context the memory estimate is made against |
-| `--allow-split` | flag | - | Permit a pipeline: across `--nodes` machines when given, and otherwise as the fallback when no single machine holds the model |
-| `--no-precheck` | flag | - | Fetch without checking first whether it fits and whether something else is served |
+| `--quantization <QUANTIZATION>` | text | - | Which quantisation to take, when a repository publishes several |
+| `--pool <POOL>` | text | - | Which pool to draw nodes from. Every healthy node by default |
+| `--nodes <NODES>` | integer | `0` | Split across exactly this many machines, as a pipeline. Needs `--allow-split`: `--nodes` alone is refused, never ignored |
+| `--context <CONTEXT>` | integer | `0` | Context the memory estimate is made against |
+| `--allow-split` | switch | - | Permit a pipeline: across `--nodes` machines when given, and otherwise as the fallback when no single machine holds the model |
+| `--no-precheck` | switch | - | Fetch without checking first whether it fits and whether something else is served |
+
+And the [connection options](index.md#connection-options).
 
 ## Notes
 
-One generation from the terminal, for checking a model is alive.
+`pull` when the model is not here yet, then `serve`: the two commands most people want as one. A catalogue name is served under the model key it is filed as, and the output says which.
 
 ## Examples
 
@@ -43,9 +40,17 @@ $ diffuse-coordinator model run qwen2.5-3b
 ```
 
 ```
-Ein Kernspintomograph ist ein bildgebendes Verfahren, das starke Magnetfelder …
+qwen2.5-3b is already here; placing it.
 
-  24 prompt + 96 completion tokens in 1.9s (50 tok/s), rechner-01
+Deployed qwen2.5-3b.
+
+  placement   whole (RAM)
+  reason      rechner-01 holds 7.9 GiB (weights 5.8 GiB + KV 288.0 MiB at context 4096 × 4 session(s) + 1.1 GiB overhead, +10% headroom) in RAM (29.1 GiB free)
+  context     4096
+
+  slice 0   layers   0..36   rechner-01         5.8 GiB    whole model
+
+[… the rest is what `model serve` prints …]
 ```
 
 ---

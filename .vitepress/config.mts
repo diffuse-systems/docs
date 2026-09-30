@@ -1,4 +1,51 @@
-import { defineConfig } from 'vitepress'
+import { readdirSync, readFileSync } from 'node:fs'
+import { dirname, join } from 'node:path'
+import { fileURLToPath } from 'node:url'
+import { defineConfig, type DefaultTheme } from 'vitepress'
+
+const site = join(dirname(fileURLToPath(import.meta.url)), '..')
+
+// **The command reference as a tree: program, group, command.** Built from the
+// pages themselves when the site builds, the first line of each naming its
+// command, so a command added to a program is in the sidebar the moment its
+// page is synced and one removed cannot leave an entry that leads nowhere. The
+// pages are generated in each program's repository and copied here by
+// `packaging/sync-cli-reference.sh` in diffuse-enterprise; editing one here is
+// editing something the next copy overwrites.
+function commandTree(dir: string, program: string): DefaultTheme.SidebarItem {
+  const base = `/enterprise/reference/${dir}`
+  const commands = readdirSync(join(site, 'enterprise/reference', dir))
+    .filter((file) => file.endsWith('.md') && file !== 'index.md')
+    .map((file) => {
+      const title = readFileSync(join(site, 'enterprise/reference', dir, file), 'utf8')
+        .split('\n', 1)[0]
+      const words = title.match(/^# `([^`]+)`$/)?.[1].split(' ') ?? []
+      if (words[0] !== program || words.length < 2 || words.length > 3) {
+        throw new Error(`${dir}/${file} does not open on a ${program} command: ${title}`)
+      }
+      return { path: words.slice(1), link: `${base}/${file.slice(0, -'.md'.length)}` }
+    })
+  const byName = (a: { path: string[] }, b: { path: string[] }) =>
+    a.path.join(' ').localeCompare(b.path.join(' '))
+
+  return {
+    text: program,
+    link: `${base}/`,
+    collapsed: true,
+    items: commands
+      .filter((command) => command.path.length === 1)
+      .sort(byName)
+      .map((command) => {
+        const subcommands = commands
+          .filter((sub) => sub.path.length === 2 && sub.path[0] === command.path[0])
+          .sort(byName)
+          .map((sub) => ({ text: sub.path[1], link: sub.link }))
+        return subcommands.length
+          ? { text: command.path[0], link: command.link, collapsed: true, items: subcommands }
+          : { text: command.path[0], link: command.link }
+      }),
+  }
+}
 
 // Two product trees, never mixed on one page. Enterprise is the commercial
 // product and comes first; Open is the public project, kept as a mirror and
@@ -107,12 +154,9 @@ export default defineConfig({
           text: 'Reference',
           items: [
             { text: 'Overview', link: '/enterprise/reference' },
-            // Generated from the binary by `diffuse-coordinator docs` and
-            // copied here by `packaging/sync-cli-reference.sh`. A test in the
-            // product repository regenerates and diffs them, so editing a page
-            // here is editing something that will be overwritten.
-            { text: 'CLI, every command', link: '/enterprise/reference/cli/index' },
-            { text: 'Node agent commands', link: '/enterprise/reference/agent-cli/index' },
+            commandTree('cli', 'diffuse-coordinator'),
+            commandTree('agent-cli', 'diffuse-node-agent'),
+            commandTree('chat-cli', 'diffuse-chat'),
             { text: 'The agent configuration file', link: '/enterprise/reference/agent-configuration' },
             { text: 'Glossary', link: '/enterprise/glossary' },
           ],

@@ -14,10 +14,10 @@ diffuse-node-agent firewall open [OPTIONS]
 
 ## Options
 
-| flag | value | default | description |
+| flag | type | default | description |
 |---|---|---|---|
-| `--from` | `<local|any|NETWORK>` | `$DIFFUSE_FIREWALL_FROM` | Who the rule lets in: `local`, the private networks this machine is on, read now (the default); a network, like `10.20.0.0/16`, for an api or pipeline peers behind a router or on public addresses; or `any`, every source, which on a machine with a public interface is the Internet |
-| `--at-install` | flag | - | Set by the package: `DIFFUSE_NO_FIREWALL` is honoured |
+| `--from <local\|any\|NETWORK>` | text | `$DIFFUSE_FIREWALL_FROM` | Who the rule lets in: `local`, the private networks this machine is on, read now (the default); a network, like `10.20.0.0/16`, for an api or pipeline peers behind a router or on public addresses; or `any`, every source, which on a machine with a public interface is the Internet |
+| `--at-install` | switch | - | Set by the package: `DIFFUSE_NO_FIREWALL` is honoured |
 
 ## Notes
 
@@ -30,7 +30,7 @@ $ sudo diffuse-node-agent firewall open
 ```
 
 ```
-The host firewall is ufw. Port 7445 is open to the private networks this
+  The host firewall is ufw. Port 7445 is open to the private networks this
   machine is on, and to nothing else. ufw saves its rules, so they are back
   after a reboot.
   What ran:

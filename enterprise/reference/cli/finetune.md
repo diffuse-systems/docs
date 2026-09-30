@@ -12,31 +12,28 @@ diffuse-coordinator finetune <MODEL> <FILE> [OPTIONS]
 
 ## Arguments
 
-| argument | required | description |
-|---|---|---|
-| `MODEL` | yes | The model to adapt, as shown by `model list` |
-| `FILE` | yes | The corpus: one JSON object per line, each with a `messages` array |
+| argument | type | required | description |
+|---|---|---|---|
+| `MODEL` | text | yes | The model to adapt, as shown by `model list` |
+| `FILE` | text | yes | The corpus: one JSON object per line, each with a `messages` array |
 
 ## Options
 
-| flag | value | default | description |
+| flag | type | default | description |
 |---|---|---|---|
-| `--config` | `<CONFIG>` | `$DIFFUSE_COORDINATOR_CONFIG` | Configuration file. Its `[admin]` section says where to connect |
-| `--endpoint` | `<ENDPOINT>` | `$DIFFUSE_COORDINATOR_ENDPOINT` | Coordinator endpoint, e.g. https://coordinator.internal:7443 |
-| `--ca-cert` | `<CA_CERT>` | `$DIFFUSE_CA_CERT` | The deployment CA certificate (PEM) |
-| `--cert` | `<CERT>` | `$DIFFUSE_CERT` | This process's certificate chain (PEM) |
-| `--key` | `<KEY>` | `$DIFFUSE_KEY` | This process's private key (PEM) |
-| `--classification` | `<CLASSIFICATION>` | `internal` | What this data is, in your organisation's own words |
-| `--as-dataset` | `<DATASET_KEY>` | - | Import the corpus under this name rather than the file's own |
-| `--as` | `<ADAPTER_KEY>` | - | What to call the adapter. Derived from the model and the corpus by default |
-| `--pool` | `<POOL>` | - | Which pool to place it in. Every healthy node by default |
-| `--rank` | `<RANK>` | - | LoRA rank. Higher learns more and costs more |
-| `--alpha` | `<ALPHA>` | - | LoRA alpha; the merged delta is scaled by alpha/rank. Twice the rank by default |
-| `--targets` | `<TARGETS>` | - | Which projections to adapt, comma separated |
-| `--epochs` | `<EPOCHS>` | - | Passes over the corpus. Chosen from its size by default |
-| `--learning-rate` | `<LEARNING_RATE>` | - | Step size |
-| `--batch` | `<BATCH>` | - | Examples per step |
-| `--max-seq-len` | `<MAX_SEQ_LEN>` | - | Tokens per example. Taken from the longest row by default |
+| `--classification <CLASSIFICATION>` | text | `internal` | What this data is, in your organisation's own words |
+| `--as-dataset <DATASET_KEY>` | text | - | Import the corpus under this name rather than the file's own |
+| `--as <ADAPTER_KEY>` | text | - | What to call the adapter. Derived from the model and the corpus by default |
+| `--pool <POOL>` | text | - | Which pool to place it in. Every healthy node by default |
+| `--rank <RANK>` | integer | - | LoRA rank. Higher learns more and costs more |
+| `--alpha <ALPHA>` | integer | - | LoRA alpha; the merged delta is scaled by alpha/rank. Twice the rank by default |
+| `--targets <TARGETS>` | text | - | Which projections to adapt, comma separated |
+| `--epochs <EPOCHS>` | integer | - | Passes over the corpus. Chosen from its size by default |
+| `--learning-rate <LEARNING_RATE>` | number | - | Step size |
+| `--batch <BATCH>` | integer | - | Examples per step |
+| `--max-seq-len <MAX_SEQ_LEN>` | integer | - | Tokens per example. Taken from the longest row by default |
+
+And the [connection options](index.md#connection-options).
 
 ## Notes
 
@@ -49,11 +46,13 @@ $ diffuse-coordinator finetune qwen2.5-3b berichte.jsonl
 ```
 
 ```
-imported 2 412 examples
-  rank 16, lr 1e-4, 3 epochs, batch 4, chosen from the corpus and rechner-01
-  job 4f2a9c started
+  dataset    berichte (2412 examples, imported)
+  method     LoRA r=16, 1 epoch, lr 2e-4        [defaults]
+  placement  rechner-01, needs 9.4 GiB of 29.1 GiB free
+  estimate   about 40 minutes
 
-Watch it:  diffuse-coordinator job watch 4f2a9c
+Started. Follow it with:
+    diffuse-coordinator job watch job-7d3k1q
 ```
 
 ---

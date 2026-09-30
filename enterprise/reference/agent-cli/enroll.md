@@ -10,12 +10,12 @@ diffuse-node-agent enroll [OPTIONS]
 
 ## Options
 
-| flag | value | default | description |
+| flag | type | default | description |
 |---|---|---|---|
-| `--endpoint` | `<ENDPOINT>` | `$DIFFUSE_ENROLL_ENDPOINT` | The coordinator's provisioning endpoint, e.g. https://coordinator.internal:7444 |
-| `--token` | `<TOKEN>` | `$DIFFUSE_JOIN_TOKEN` | The join token, as printed by `diffuse-coordinator token create` |
-| `--hostname` | `<HOSTNAME>` | `$DIFFUSE_NODE_NAME` | What to call this machine. A hint only: the coordinator assigns the name, and may assign a different one |
-| `--force` | flag | - | Replace an identity already in the state directory |
+| `--endpoint <ENDPOINT>` | text | `$DIFFUSE_ENROLL_ENDPOINT` | The coordinator's provisioning endpoint, e.g. https://coordinator.internal:7444 |
+| `--token <TOKEN>` | text | `$DIFFUSE_JOIN_TOKEN` | The join token, as printed by `diffuse-coordinator token create` |
+| `--hostname <HOSTNAME>` | text | `$DIFFUSE_NODE_NAME` | What to call this machine. A hint only: the coordinator assigns the name, and may assign a different one |
+| `--force` | switch | - | Replace an identity already in the state directory |
 
 ## Notes
 

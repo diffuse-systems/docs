@@ -19,10 +19,13 @@ $ diffuse-node-agent status
 ```
 
 ```
-node-04
-  coordinator  https://coordinator.internal:7443
-  identity     valid until 2026-11-27, renews automatically
-  last seen    2s ago
+identity     node-04
+certificate  expires in 71 days
+coordinator  https://coordinator.internal:7443
+last beat    2s ago
+registered   3h ago
+pool         lab
+serving      qwen2.5-3b  layers 0..18  ready
 ```
 
 ---

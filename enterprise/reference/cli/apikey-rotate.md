@@ -10,20 +10,17 @@ diffuse-coordinator apikey rotate <HANDLE> [OPTIONS]
 
 ## Arguments
 
-| argument | required | description |
-|---|---|---|
-| `HANDLE` | yes | The key handle to replace, as shown by `apikey list` |
+| argument | type | required | description |
+|---|---|---|---|
+| `HANDLE` | text | yes | The key handle to replace, as shown by `apikey list` |
 
 ## Options
 
-| flag | value | default | description |
+| flag | type | default | description |
 |---|---|---|---|
-| `--config` | `<CONFIG>` | `$DIFFUSE_COORDINATOR_CONFIG` | Configuration file. Its `[admin]` section says where to connect |
-| `--endpoint` | `<ENDPOINT>` | `$DIFFUSE_COORDINATOR_ENDPOINT` | Coordinator endpoint, e.g. https://coordinator.internal:7443 |
-| `--ca-cert` | `<CA_CERT>` | `$DIFFUSE_CA_CERT` | The deployment CA certificate (PEM) |
-| `--cert` | `<CERT>` | `$DIFFUSE_CERT` | This process's certificate chain (PEM) |
-| `--key` | `<KEY>` | `$DIFFUSE_KEY` | This process's private key (PEM) |
-| `--overlap` | `<OVERLAP>` | `24h` | How long the old key keeps working, e.g. 24h. Default: 24h |
+| `--overlap <OVERLAP>` | duration, `90d`, `12h`, `30m` | `24h` | How long the old key keeps working, e.g. 24h. Default: 24h |
+
+And the [connection options](index.md#connection-options).
 
 ## Notes
 
@@ -37,9 +34,10 @@ $ diffuse-coordinator apikey rotate 4KPFWJV8 --overlap 24h
 
 ```
 API key 9SRHEWM5 created; it replaces 4KPFWJV8.
-  same name, same scope, same rights: a rotation changes the secret and nothing else.
-  4KPFWJV8 keeps working until 2026-08-27 10:30:00Z, move your integration over
-  before then, and it never sees an outage.
+  same name, same scope, same rights: a rotation changes the secret and nothing
+  else.
+  4KPFWJV8 keeps working until 2026-08-27 10:30:00Z: move your integration over before then, and it never sees an outage.
+  this is the only time the key is shown; only its hash is stored.
 
 dfe_sk_9SRHEWM5P8P5Q881DM2MBK8B6MCGWBHC2DM3Y
 ```

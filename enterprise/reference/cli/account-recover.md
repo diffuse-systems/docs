@@ -10,11 +10,11 @@ diffuse-coordinator account recover [OPTIONS]
 
 ## Options
 
-| flag | value | default | description |
+| flag | type | default | description |
 |---|---|---|---|
-| `--state-dir` | `<STATE_DIR>` | `$DIFFUSE_STATE_DIR` | The coordinator's state directory |
-| `--config` | `<CONFIG>` | `$DIFFUSE_COORDINATOR_CONFIG` | Configuration file, read only for its `state_dir` |
-| `--login` | `<LOGIN>` | - | Whose password to reset |
+| `--state-dir <STATE_DIR>` | path | `$DIFFUSE_STATE_DIR` | The coordinator's state directory |
+| `--config <CONFIG>` | path | `$DIFFUSE_COORDINATOR_CONFIG` | Configuration file, read only for its `state_dir` |
+| `--login <LOGIN>` | text | - | Whose password to reset |
 
 ## Notes
 
@@ -27,7 +27,9 @@ $ diffuse-coordinator account recover --login marie.chercheuse
 ```
 
 ```
-one-time password   SNDNZ80EPM4DP51Q
+Password for marie.chercheuse reset.
+
+  one-time password   SNDNZ80EPM4DP51Q
 
 Every session this account held has been revoked, and the next login with this
 password may only change it. This use is on the audit trail:

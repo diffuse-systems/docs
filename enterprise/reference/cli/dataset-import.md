@@ -10,22 +10,19 @@ diffuse-coordinator dataset import [OPTIONS]
 
 ## Options
 
-| flag | value | default | description |
+| flag | type | default | description |
 |---|---|---|---|
-| `--config` | `<CONFIG>` | `$DIFFUSE_COORDINATOR_CONFIG` | Configuration file. Its `[admin]` section says where to connect |
-| `--endpoint` | `<ENDPOINT>` | `$DIFFUSE_COORDINATOR_ENDPOINT` | Coordinator endpoint, e.g. https://coordinator.internal:7443 |
-| `--ca-cert` | `<CA_CERT>` | `$DIFFUSE_CA_CERT` | The deployment CA certificate (PEM) |
-| `--cert` | `<CERT>` | `$DIFFUSE_CERT` | This process's certificate chain (PEM) |
-| `--key` | `<KEY>` | `$DIFFUSE_KEY` | This process's private key (PEM) |
-| `--from` | `<PATH>` | - | The file, as a path on the coordinator |
-| `--as` | `<DATASET_KEY>` | - | Slug to file it under. Derived from the file name by default |
-| `--format` | `<FORMAT>` | `chat` | `chat` for training data, `eval` for a suite with expected answers |
-| `--classification` | `<CLASSIFICATION>` | - | **Required.** What this data is, in your organisation's own words |
-| `--retention-days` | `<RETENTION_DAYS>` | `0` | Delete it after this many days. Zero keeps it until removed |
+| `--from <PATH>` | text | - | The file, as a path on the coordinator |
+| `--as <DATASET_KEY>` | text | - | Slug to file it under. Derived from the file name by default |
+| `--format <FORMAT>` | text | `chat` | `chat` for training data, `eval` for a suite with expected answers |
+| `--classification <CLASSIFICATION>` | text | - | **Required.** What this data is, in your organisation's own words |
+| `--retention-days <RETENTION_DAYS>` | integer | `0` | Delete it after this many days. Zero keeps it until removed |
+
+And the [connection options](index.md#connection-options).
 
 ## Notes
 
-JSONL, one example per line. The coordinator records what you declared it is: it does not inspect your data to guess.
+JSONL, one example per line. The coordinator records what you declared it is: it does not inspect your data to guess. `--format eval` imports an evaluation suite: each line a conversation with the answer it expects, under `expected`.
 
 ## Examples
 
@@ -34,10 +31,11 @@ $ diffuse-coordinator dataset import --from berichte.jsonl --as berichte --class
 ```
 
 ```
-berichte imported.
-  2 412 examples, 3.1 MiB
-  format    chat
-  checksum  sha256:9f2c…
+Imported berichte (2412 rows).
+
+  classification  internal
+  sha256          9f2c4b8e0d1a7c3f5e6b2d9a8c7f1e0b3d5a6c9e2f4b7d8a1c3e5f7a9b0c2d4e
+  source          file:///srv/corpora/berichte.jsonl
 ```
 
 ---

@@ -10,12 +10,12 @@ diffuse-coordinator firewall status [OPTIONS]
 
 ## Options
 
-| flag | value | default | description |
+| flag | type | default | description |
 |---|---|---|---|
-| `--config` | `<CONFIG>` | - | The coordinator's configuration, read for the ports. Defaults to the packaged one |
-| `--api-env` | `<API_ENV>` | `/etc/diffuse/api.env` | The api's environment file, read for its port |
-| `--if-closed` | flag | - | Set by the package on an upgrade: print only a port this version expects open and finds shut, and change nothing |
-| `--output` | `table` \| `json` | `table` | `table` for a person, `json` for a script |
+| `--config <CONFIG>` | path | - | The coordinator's configuration, read for the ports. Defaults to the packaged one |
+| `--api-env <API_ENV>` | path | `/etc/diffuse/api.env` | The api's environment file, read for its port |
+| `--if-closed` | switch | - | Set by the package on an upgrade: print only a port this version expects open and finds shut, and change nothing |
+| `--output <OUTPUT>` | one of `table`, `json` | `table` | `table` for a person, `json` for a script |
 
 ## Notes
 
@@ -28,7 +28,7 @@ $ sudo diffuse-coordinator firewall status
 ```
 
 ```
-Reachable from your network, on this machine (firewall: ufw):
+  Reachable from your network, on this machine (firewall: ufw):
 
     7443  control plane: heartbeats and slices, mTLS         from 172.30.77.0/24
     7444  enrolment: machines joining with a token           closed: no ufw rule allows it

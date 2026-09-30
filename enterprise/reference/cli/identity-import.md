@@ -10,19 +10,13 @@ diffuse-coordinator identity import <FILE> [OPTIONS]
 
 ## Arguments
 
-| argument | required | description |
-|---|---|---|
-| `FILE` | yes | The CSV file. Columns: subject, address, models, pool |
+| argument | type | required | description |
+|---|---|---|---|
+| `FILE` | path | yes | The CSV file. Columns: subject, address, models, pool |
 
 ## Options
 
-| flag | value | default | description |
-|---|---|---|---|
-| `--config` | `<CONFIG>` | `$DIFFUSE_COORDINATOR_CONFIG` | Configuration file. Its `[admin]` section says where to connect |
-| `--endpoint` | `<ENDPOINT>` | `$DIFFUSE_COORDINATOR_ENDPOINT` | Coordinator endpoint, e.g. https://coordinator.internal:7443 |
-| `--ca-cert` | `<CA_CERT>` | `$DIFFUSE_CA_CERT` | The deployment CA certificate (PEM) |
-| `--cert` | `<CERT>` | `$DIFFUSE_CERT` | This process's certificate chain (PEM) |
-| `--key` | `<KEY>` | `$DIFFUSE_KEY` | This process's private key (PEM) |
+Only the [connection options](index.md#connection-options).
 
 ## Notes
 

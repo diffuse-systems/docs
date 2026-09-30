@@ -2,6 +2,64 @@
 
 Every command of `diffuse-coordinator`, generated from the binary itself. If a page here disagrees with what your terminal prints, the page is a bug: a test regenerates all of this and fails on any difference.
 
+## Where to start
+
+Every command below runs on the coordinator's own machine as root, where
+`/etc/diffuse/coordinator.toml` already says where to connect. From another
+machine, [`login`](login.md) first.
+
+### The first hour, in five commands
+
+Install the licence you were sent, create a token for your machines, run a
+model from the catalogue, and give an application a key:
+
+```bash
+sudo diffuse-coordinator licence set /tmp/klinik.licence
+sudo diffuse-coordinator token create --pool lab --max-uses 10 --ttl 2h
+sudo diffuse-coordinator model run qwen2.5:3b --pool lab
+sudo diffuse-coordinator apikey create --name first-app --expires 90d
+sudo diffuse-coordinator deployment list
+```
+
+[`licence set`](licence-set.md) · [`token create`](token-create.md) ·
+[`model run`](model-run.md) · [`apikey create`](apikey-create.md) ·
+[`deployment list`](deployment-list.md). Each machine that computes joins with
+the line `token create` prints: see [node](node.md).
+
+### See the state of the park
+
+```bash
+sudo diffuse-coordinator nodes
+sudo diffuse-coordinator deployment list
+sudo diffuse-coordinator licence show
+```
+
+[`nodes`](nodes.md) lists the machines and their health,
+[`deployment list`](deployment-list.md) what is served and where,
+[`licence show`](licence-show.md) until when.
+
+### Find what happened
+
+```bash
+sudo diffuse-coordinator audit --limit 20
+sudo diffuse-coordinator audit --result denied --limit 20
+```
+
+[`audit`](audit.md) reads the trail: every change, every refusal and every
+sensitive read, with who did it.
+
+## Connection options
+
+Every command that talks to a running coordinator takes these five. On the coordinator's own machine, run as root, none is needed: `/etc/diffuse/coordinator.toml`, read by default, says where to connect and with which certificate. From another machine, `login` opens a session the commands use. A certificate given with these flags wins over a session.
+
+| flag | type | default | description |
+|---|---|---|---|
+| `--config <CONFIG>` | path | `$DIFFUSE_COORDINATOR_CONFIG` | Configuration file. Its `[admin]` section says where to connect |
+| `--endpoint <ENDPOINT>` | text | `$DIFFUSE_COORDINATOR_ENDPOINT` | Coordinator endpoint, e.g. https://coordinator.internal:7443 |
+| `--ca-cert <CA_CERT>` | path | `$DIFFUSE_CA_CERT` | The deployment CA certificate (PEM) |
+| `--cert <CERT>` | path | `$DIFFUSE_CERT` | This process's certificate chain (PEM) |
+| `--key <KEY>` | path | `$DIFFUSE_KEY` | This process's private key (PEM) |
+
 ## [`init`](init.md)
 
 Prepare the state directory and derive the enrolment CA from the deployment root CA
@@ -73,7 +131,7 @@ Acquire, inspect and place models
 
 | command | what it does |
 |---|---|
-| [`model import`](model-import.md) | Ingest a model from a directory. The path for a coordinator with no internet route, which is most of them in a regulated deployment |
+| [`model import`](model-import.md) | Ingest a model from a .gguf file or a safetensors directory. The path for a coordinator with no internet route, which is most of them in a regulated deployment |
 | [`model pull`](model-pull.md) | Fetch a model: a name from the catalogue, or a repository on a hub |
 | [`model run`](model-run.md) | Fetch a model and serve it: the two commands most people want as one |
 | [`model list`](model-list.md) | List acquired models and their provenance |

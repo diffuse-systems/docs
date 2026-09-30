@@ -10,28 +10,22 @@ diffuse-coordinator session revoke <HANDLE> [OPTIONS]
 
 ## Arguments
 
-| argument | required | description |
-|---|---|---|
-| `HANDLE` | yes | The handle, as `session list` shows it |
+| argument | type | required | description |
+|---|---|---|---|
+| `HANDLE` | text | yes | The handle, as `session list` shows it |
 
 ## Options
 
-| flag | value | default | description |
-|---|---|---|---|
-| `--config` | `<CONFIG>` | `$DIFFUSE_COORDINATOR_CONFIG` | Configuration file. Its `[admin]` section says where to connect |
-| `--endpoint` | `<ENDPOINT>` | `$DIFFUSE_COORDINATOR_ENDPOINT` | Coordinator endpoint, e.g. https://coordinator.internal:7443 |
-| `--ca-cert` | `<CA_CERT>` | `$DIFFUSE_CA_CERT` | The deployment CA certificate (PEM) |
-| `--cert` | `<CERT>` | `$DIFFUSE_CERT` | This process's certificate chain (PEM) |
-| `--key` | `<KEY>` | `$DIFFUSE_KEY` | This process's private key (PEM) |
+Only the [connection options](index.md#connection-options).
 
 ## Examples
 
 ```bash
-$ diffuse-coordinator session revoke b7e33a1f
+$ diffuse-coordinator session revoke 9N903BGH
 ```
 
 ```
-Session b7e33a1f revoked. That terminal is signed out.
+Session 9N903BGH is revoked. The next call it makes is refused.
 ```
 
 ---

@@ -10,38 +10,35 @@ diffuse-coordinator distill <CORPUS> [OPTIONS]
 
 ## Arguments
 
-| argument | required | description |
-|---|---|---|
-| `CORPUS` | yes | The corpus: a file on the coordinator, or a name from `dataset list` |
+| argument | type | required | description |
+|---|---|---|---|
+| `CORPUS` | text | yes | The corpus: a file on the coordinator, or a name from `dataset list` |
 
 ## Options
 
-| flag | value | default | description |
+| flag | type | default | description |
 |---|---|---|---|
-| `--config` | `<CONFIG>` | `$DIFFUSE_COORDINATOR_CONFIG` | Configuration file. Its `[admin]` section says where to connect |
-| `--endpoint` | `<ENDPOINT>` | `$DIFFUSE_COORDINATOR_ENDPOINT` | Coordinator endpoint, e.g. https://coordinator.internal:7443 |
-| `--ca-cert` | `<CA_CERT>` | `$DIFFUSE_CA_CERT` | The deployment CA certificate (PEM) |
-| `--cert` | `<CERT>` | `$DIFFUSE_CERT` | This process's certificate chain (PEM) |
-| `--key` | `<KEY>` | `$DIFFUSE_KEY` | This process's private key (PEM) |
-| `--teacher` | `<TEACHER>` | - | The model whose behaviour is being copied |
-| `--student` | `<STUDENT>` | - | The model that will learn it |
-| `--classification` | `<CLASSIFICATION>` | `internal` | What the corpus is, in your organisation's own words |
-| `--eval-suite` | `<EVAL_SUITE>` | - | The suite the teacher and the student are both scored on |
-| `--pool` | `<POOL>` | - | Which pool does the work. Any pool when omitted |
-| `--as` | `<ADAPTER_KEY>` | - | What to call the student. Derived when empty |
-| `--top-k` | `<TOP_K>` | `64` | How many of the teacher's logits to keep per position |
-| `--temperature` | `<TEMPERATURE>` | `1` | Distillation temperature |
-| `--alpha` | `<ALPHA>` | `0.9` | Weight of the soft-label term against the hard-label one |
-| `--labelled-dataset` | `<LABELLED_DATASET>` | - | Skip the teacher and train on a corpus that was already labelled |
-| `--batch` | `<BATCH>` | `1` | Examples per optimiser step. Raise it while the machine has memory spare; a larger batch is steadier and finishes sooner |
-| `--max-seq-len` | `<MAX_SEQ_LEN>` | `512` | Tokens per example. Anything longer is truncated, so set this to the length your corpus actually needs rather than to the model's maximum |
-| `--epochs` | `<EPOCHS>` | `1` | Passes over the corpus. One is usually right for distillation: the soft labels carry far more signal per example than hard ones |
-| `--learning-rate` | `<LEARNING_RATE>` | `0.0001` | Optimiser step size. Lower it if the loss moves erratically; the default is the one design 009 measured on corpora of this shape |
-| `--checkpoint-every-steps` | `<CHECKPOINT_EVERY_STEPS>` | `20` | How often the run writes a checkpoint it could resume from. Every checkpoint costs disk and a pause; a long run wants them, a short one does not |
+| `--teacher <TEACHER>` | text | - | The model whose behaviour is being copied |
+| `--student <STUDENT>` | text | - | The model that will learn it |
+| `--classification <CLASSIFICATION>` | text | `internal` | What the corpus is, in your organisation's own words |
+| `--eval-suite <EVAL_SUITE>` | text | - | The suite the teacher and the student are both scored on |
+| `--pool <POOL>` | text | - | Which pool does the work. Any pool when omitted |
+| `--as <ADAPTER_KEY>` | text | - | What to call the student. Derived when empty |
+| `--top-k <TOP_K>` | integer | `64` | How many of the teacher's logits to keep per position |
+| `--temperature <TEMPERATURE>` | number | `1` | Distillation temperature |
+| `--alpha <ALPHA>` | number | `0.9` | Weight of the soft-label term against the hard-label one |
+| `--labelled-dataset <LABELLED_DATASET>` | text | - | Skip the teacher and train on a corpus that was already labelled |
+| `--batch <BATCH>` | integer | `1` | Examples per optimiser step. Raise it while the machine has memory spare; a larger batch is steadier and finishes sooner |
+| `--max-seq-len <MAX_SEQ_LEN>` | integer | `512` | Tokens per example. Anything longer is truncated, so set this to the length your corpus actually needs rather than to the model's maximum |
+| `--epochs <EPOCHS>` | integer | `1` | Passes over the corpus. One is usually right for distillation: the soft labels carry far more signal per example than hard ones |
+| `--learning-rate <LEARNING_RATE>` | number | `0.0001` | Optimiser step size. Lower it if the loss moves erratically; the default is the one design 009 measured on corpora of this shape |
+| `--checkpoint-every-steps <CHECKPOINT_EVERY_STEPS>` | integer | `20` | How often the run writes a checkpoint it could resume from. Every checkpoint costs disk and a pause; a long run wants them, a short one does not |
+
+And the [connection options](index.md#connection-options).
 
 ## Notes
 
-Teacher and student in one command: the teacher **scores the answers your corpus already has**, position by position, and the student trains on those scores. It does not write answers: a corpus of questions alone is refused, naming the first line that is short. The teacher must be served; the student need not be.
+Teacher and student in one command: the teacher **scores the answers your corpus already has**, position by position, and the student trains on those scores. It does not write answers: a corpus of questions alone is refused, naming the first line that is short. The command follows every stage to the end.
 
 ## Examples
 
@@ -50,13 +47,19 @@ $ diffuse-coordinator distill --teacher qwen2.5-3b --student qwen2.5-0.5b-instru
 ```
 
 ```
-corpus     berichte (2 412 examples, imported)
+  corpus     berichte (2412 prompts, imported)
   labels     qwen2.5-3b scores your answers; it does not write any
-  labels     about 450 MiB on disk (2412 rows x k=64 x 512 tokens)
-  training qwen2.5-0.5b-instruct on the soft labels
-  job 7c31a8 started
+  labels     about 452.2 MiB on disk (2412 rows x k=64 x 512 tokens)
+  stage 1/2 labelling  0 of 2412
+  […]
+  stage 2/2 training  2412 of 2412
 
-Watch it:  diffuse-coordinator job watch 7c31a8
+berichte-klein distilled from qwen2.5-3b, at 1/6 of the size
+
+  The labelled corpus is kept as berichte-labelled, and it is the expensive half.
+  Another student learns from it without running qwen2.5-3b again:
+    diffuse-coordinator distill --teacher qwen2.5-3b --student <other> \
+      --labelled-dataset berichte-labelled berichte
 ```
 
 ---

@@ -2,87 +2,39 @@
 
 The commands, the endpoints, the error codes and the files.
 
-## CLI
+## Commands
 
-Everything is `diffuse-coordinator <noun> <verb>`, and every noun removes with
-`rm`. What follows is the shape of it; **[the complete reference](./reference/cli/index.md)**
-has a page for every command and subcommand, with every flag, its default, and a
-worked example: generated from the binary, so it cannot drift from what your
-terminal does.
+Three programs, each on its own machine. Each has a reference generated from
+the program itself: a page for every command, with its synopsis, its flags
+with their types and defaults, and examples, so a page cannot disagree with
+what your terminal does.
 
-### Setup
+| program | where it runs | |
+|---|---|---|
+| `diffuse-coordinator` | the coordinator's machine | [every command](./reference/cli/index.md) |
+| `diffuse-node-agent` | every machine that computes | [every command](./reference/agent-cli/index.md) |
+| `./diffuse-chat` | the machine that runs the chat interface | [every command](./reference/chat-cli/index.md) |
 
-| | |
+Each group of commands opens on what you do with it, in commands meant to be
+copied. Every one of those commands is parsed by the program's own parser
+before a release, and links the page of each command it runs.
+
+| to | start at |
 |---|---|
-| `init --org "<name>"` | create the deployment and its authority |
-| `licence set <file>` | install a licence, verifying it first |
-| `licence show` | entitlement, and until when |
+| install the licence, and see what it allows | [`licence`](./reference/cli/licence.md) |
+| serve a model | [`model`](./reference/cli/model.md) |
+| open the network to the machines, and close it | [`firewall`](./reference/cli/firewall.md), and on each machine [the agent's](./reference/agent-cli/firewall.md) |
+| add a machine | [`token`](./reference/cli/token.md), then on the machine [`enroll`](./reference/agent-cli/index.md) |
+| remove a machine | [`node`](./reference/cli/node.md) |
+| give an application access | [`apikey`](./reference/cli/apikey.md) |
+| a chat interface that acts for each person | [`identity`](./reference/cli/identity.md), then [`diffuse-chat`](./reference/chat-cli/index.md) |
+| read the audit trail, or export a period | [`audit`](./reference/cli/audit.md) |
+| fine-tune or distil | [`job`](./reference/cli/job.md) |
+| the coordinator moved | [`certificate`](./reference/cli/certificate.md) |
 
-### Machines
-
-| | |
-|---|---|
-| `token create --pool <p> --max-uses <n> --ttl <d>` | a join token |
-| `nodes` / `nodes --wide` | the pool; `--wide` adds the reason a slice failed |
-| `node revoke <id>` | refuse an identity from now on |
-
-On the machine itself: `diffuse-node-agent enroll --token DFE1-...`
-
-## On a machine that computes
-
-The agent has its own commands and its own configuration file, and they are
-what you reach for when one machine has stopped working rather than the cluster.
-
-| | |
-|---|---|
-| `enroll --token DFE1-...` | join this machine to a deployment |
-| `status` | what this machine knows, from local files, with no network |
-| `config show` | every setting in `/etc/diffuse/agent.toml`, and what it does |
-| `config set-coordinator <url>` | point it at a different coordinator, checking the address first |
-
-**[Every agent command](./reference/agent-cli/index.md)** is generated from the
-binary in the same way. **[The agent configuration
-file](./reference/agent-configuration.md)** explains each setting, when a change
-takes effect, and how to repair a machine that is pointed at the wrong address.
-
-### Models
-
-| | |
-|---|---|
-| `model list --available` | the catalogue, from the binary, no network |
-| `model pull <alias or owner/repo>` | fetch |
-| `model import --from <path>` | take a file you already have |
-| `model run <alias>` | pull, then serve |
-| `model serve <key>` or `<key>+<adapter>` | place it |
-| `model list` | what is here, with provenance |
-| `model rm <key>` | remove |
-| `deployment list` / `deployment rm <id>` | what is placed, and stop it |
-
-### Training
-
-| | |
-|---|---|
-| `finetune <model> <corpus.jsonl>` | import, choose, start |
-| `job watch <id>` | follow to the end, then what to do next |
-| `job list` / `job get <id>` / `job cancel <id>` | |
-| `adapter list` / `adapter export <key> --out <path>` / `adapter rm <key>` | |
-| `distill --teacher <t> --student <s> <corpus.jsonl>` | both stages |
-| `eval <suite> --model <model>+<adapter>` | score both sides |
-| `dataset import --from <file> --classification <word>` | |
-
-### Access
-
-| | |
-|---|---|
-| `apikey create --name <n> [--expires <d>] [--scope-models <list>]` | |
-| `apikey list` / `apikey revoke <handle>` | |
-| `login` / `logout` / `whoami` / `password` | |
-| `account create --login <l> --role <r>` / `account disable <l>` | |
-| `sessions` | who is signed in, from where |
-| `audit --limit <n> [--actor <a>] [--since <d>] [--output json]` | |
-
-Every command takes `--output json`. `--endpoint`, `--ca-cert`, `--cert` and
-`--key` override the configuration file for a single invocation.
+**[The agent configuration file](./reference/agent-configuration.md)** explains
+each setting of `/etc/diffuse/agent.toml`, when a change takes effect, and how
+to repair a machine that is pointed at the wrong address.
 
 ## API
 
@@ -141,5 +93,7 @@ on the audit trail.
 ## Exit codes
 
 `0` success. `1` a refusal you can act on, with the reason on stderr. `2` the
-command was wrong, with usage. `77` a configuration error, which systemd is told
-not to restart, because looping on a bad configuration file hides it.
+command was wrong, with usage. `77`, from `diffuse-node-agent` only: this
+machine's certificate has expired, which restarting cannot fix, so systemd is
+told not to restart it. [Enrol the machine again](./reference/agent-cli/enroll.md)
+with a new token.

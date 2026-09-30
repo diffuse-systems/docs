@@ -14,13 +14,13 @@ diffuse-coordinator certificate renew [OPTIONS]
 
 ## Options
 
-| flag | value | default | description |
+| flag | type | default | description |
 |---|---|---|---|
-| `--config` | `<CONFIG>` | `$DIFFUSE_COORDINATOR_CONFIG` | Configuration file, read for the state directory and the control port |
-| `--host` | `<HOSTS>` | - | A name or an address to cover besides this machine's own: a load balancer's name, the outside of a NAT. Repeatable |
-| `--root-ca-key` | `<ROOT_CA_KEY>` | - | The deployment root CA private key (PEM), when it is no longer in the state directory. Read once, not stored |
-| `--cert-dir` | `<CERT_DIR>` | `/etc/diffuse` | Where the certificates are |
-| `--no-restart` | flag | - | Write the certificate, but do not restart anything |
+| `--config <CONFIG>` | path | `$DIFFUSE_COORDINATOR_CONFIG` | Configuration file, read for the state directory and the control port |
+| `--host <HOSTS>` | text | - | A name or an address to cover besides this machine's own: a load balancer's name, the outside of a NAT. Repeatable |
+| `--root-ca-key <ROOT_CA_KEY>` | path | - | The deployment root CA private key (PEM), when it is no longer in the state directory. Read once, not stored |
+| `--cert-dir <CERT_DIR>` | path | `/etc/diffuse` | Where the certificates are |
+| `--no-restart` | switch | - | Write the certificate, but do not restart anything |
 
 ## Notes
 
@@ -33,7 +33,7 @@ $ sudo diffuse-coordinator certificate renew
 ```
 
 ```
-This machine's certificate, /etc/diffuse/coordinator.crt, now covers:
+  This machine's certificate, /etc/diffuse/coordinator.crt, now covers:
 
     localhost, rechner-01, rechner-01.fritz.box, rechner-01.local, 127.0.0.1,
     10.77.5.2

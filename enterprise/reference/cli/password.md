@@ -10,14 +10,11 @@ diffuse-coordinator password [OPTIONS]
 
 ## Options
 
-| flag | value | default | description |
+| flag | type | default | description |
 |---|---|---|---|
-| `--config` | `<CONFIG>` | `$DIFFUSE_COORDINATOR_CONFIG` | Configuration file. Its `[admin]` section says where to connect |
-| `--endpoint` | `<ENDPOINT>` | `$DIFFUSE_COORDINATOR_ENDPOINT` | Coordinator endpoint, e.g. https://coordinator.internal:7443 |
-| `--ca-cert` | `<CA_CERT>` | `$DIFFUSE_CA_CERT` | The deployment CA certificate (PEM) |
-| `--cert` | `<CERT>` | `$DIFFUSE_CERT` | This process's certificate chain (PEM) |
-| `--key` | `<KEY>` | `$DIFFUSE_KEY` | This process's private key (PEM) |
-| `--output` | `table` \| `json` | `table` | Output format |
+| `--output <OUTPUT>` | one of `table`, `json` | `table` | Output format |
+
+And the [connection options](index.md#connection-options).
 
 ## Examples
 
@@ -26,11 +23,11 @@ $ diffuse-coordinator password
 ```
 
 ```
-current password:
-new password:
-confirm:
-
-Changed. Every other session this account held has been ended.
+Current password:
+New password:
+New password again:
+Password changed. Every session of this account has been ended, including this one.
+  diffuse-coordinator login
 ```
 
 ---

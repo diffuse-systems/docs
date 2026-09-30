@@ -12,17 +12,17 @@ diffuse-coordinator licence set <PATH> [OPTIONS]
 
 ## Arguments
 
-| argument | required | description |
-|---|---|---|
-| `PATH` | yes | The licence file we sent you |
+| argument | type | required | description |
+|---|---|---|---|
+| `PATH` | path | yes | The licence file we sent you |
 
 ## Options
 
-| flag | value | default | description |
+| flag | type | default | description |
 |---|---|---|---|
-| `--config` | `<CONFIG>` | - | The coordinator's configuration, read to find the console's port and the state directory. Defaults to the packaged one |
-| `--install-to` | `<INSTALL_TO>` | `/etc/diffuse/licence` | Where the coordinator reads its licence from |
-| `--no-restart` | flag | - | Install the file, but do not restart anything |
+| `--config <CONFIG>` | path | - | The coordinator's configuration, read to find the console's port and the state directory. Defaults to the packaged one |
+| `--install-to <INSTALL_TO>` | path | `/etc/diffuse/licence` | Where the coordinator reads its licence from |
+| `--no-restart` | switch | - | Install the file, but do not restart anything |
 
 ## Notes
 
@@ -35,7 +35,7 @@ $ sudo diffuse-coordinator licence set /tmp/klinik-2027.licence
 ```
 
 ```
-organisation  Klinik Beispiel
+  organisation  Klinik Beispiel
   licence       lic-2027-0142
   edition       enterprise
   nodes         24

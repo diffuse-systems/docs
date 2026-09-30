@@ -10,9 +10,9 @@ diffuse-node-agent firewall status [OPTIONS]
 
 ## Options
 
-| flag | value | default | description |
+| flag | type | default | description |
 |---|---|---|---|
-| `--if-closed` | flag | - | Set by the package on an upgrade: print only a port this version expects open and finds shut, and change nothing |
+| `--if-closed` | switch | - | Set by the package on an upgrade: print only a port this version expects open and finds shut, and change nothing |
 
 ## Notes
 
@@ -25,7 +25,7 @@ $ sudo diffuse-node-agent firewall status
 ```
 
 ```
-Reachable from your network, on this machine (firewall: ufw):
+  Reachable from your network, on this machine (firewall: ufw):
 
     7445  data plane: the api and pipeline peers, mTLS       from 192.168.178.0/24 (eth0)
 

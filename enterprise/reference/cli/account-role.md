@@ -10,20 +10,14 @@ diffuse-coordinator account role <LOGIN> <ROLE> [OPTIONS]
 
 ## Arguments
 
-| argument | required | description |
-|---|---|---|
-| `LOGIN` | yes | Whose role to change |
-| `ROLE` | yes | owner, admin, operator, developer or auditor |
+| argument | type | required | description |
+|---|---|---|---|
+| `LOGIN` | text | yes | Whose role to change |
+| `ROLE` | text | yes | owner, admin, operator, developer or auditor |
 
 ## Options
 
-| flag | value | default | description |
-|---|---|---|---|
-| `--config` | `<CONFIG>` | `$DIFFUSE_COORDINATOR_CONFIG` | Configuration file. Its `[admin]` section says where to connect |
-| `--endpoint` | `<ENDPOINT>` | `$DIFFUSE_COORDINATOR_ENDPOINT` | Coordinator endpoint, e.g. https://coordinator.internal:7443 |
-| `--ca-cert` | `<CA_CERT>` | `$DIFFUSE_CA_CERT` | The deployment CA certificate (PEM) |
-| `--cert` | `<CERT>` | `$DIFFUSE_CERT` | This process's certificate chain (PEM) |
-| `--key` | `<KEY>` | `$DIFFUSE_KEY` | This process's private key (PEM) |
+Only the [connection options](index.md#connection-options).
 
 ## Notes
 
@@ -36,7 +30,8 @@ $ diffuse-coordinator account role jonas.pfleger operator
 ```
 
 ```
-jonas.pfleger is now an operator. Their sessions have been ended.
+jonas.pfleger is now operator.
+Their sessions have been ended; the new role applies at their next login.
 ```
 
 ---

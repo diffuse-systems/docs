@@ -2,6 +2,56 @@
 
 Read the audit trail: who did what, when, and what was refused.
 
+## What you do with it
+
+Every change, every refusal and every sensitive read, with who did it and
+through what. Reading and exporting it keeps working when the licence has
+lapsed.
+
+### Read what happened lately
+
+```bash
+sudo diffuse-coordinator audit --limit 20
+sudo diffuse-coordinator audit --since 24h --result denied
+```
+
+[`audit`](audit.md) shows the most recent entries in a table.
+
+### Follow one person, one action or one object
+
+```bash
+sudo diffuse-coordinator audit --user marie.chercheuse --since 30d
+sudo diffuse-coordinator audit --action model.serve --limit 50
+sudo diffuse-coordinator audit --object qwen2.5-3b --since 7d
+```
+
+[`audit`](audit.md). `--user` matches part of the actor, whether a person, a
+machine, a key or a gateway acting for somebody.
+
+### Export a period for an auditor, as CSV
+
+`--from` is included and `--to` excluded, so consecutive periods neither
+overlap nor leave a gap. An export has no cap: every matching entry, oldest
+first.
+
+```bash
+sudo diffuse-coordinator audit --from 2026-07-01 --to 2026-10-01 --class change,denied --output csv > audit-2026-q3.csv
+```
+
+[`audit`](audit.md). A CSV cell that a spreadsheet would run as a formula
+starts with an apostrophe.
+
+### Export for a SIEM, as JSON Lines
+
+One JSON object per line, never altered:
+
+```bash
+sudo diffuse-coordinator audit --from 2026-09-01 --to 2026-10-01 --output jsonl > audit-2026-09.jsonl
+sudo diffuse-coordinator audit --since 1d --output jsonl
+```
+
+[`audit`](audit.md)
+
 ## Synopsis
 
 ```
@@ -10,26 +60,23 @@ diffuse-coordinator audit [OPTIONS]
 
 ## Options
 
-| flag | value | default | description |
+| flag | type | default | description |
 |---|---|---|---|
-| `--actor` | `<ACTOR>` | - | Substring of the actor, e.g. `ops-laptop` or `apikey/EF61VQ4R` |
-| `--user` | `<USER>` | - | Alias for `--actor`, for the spelling the north star uses |
-| `--action` | `<ACTION>` | - | Exact action, e.g. `model.serve` or `node.enrol` |
-| `--object` | `<OBJECT>` | - | Substring of the object acted on |
-| `--via` | `<VIA>` | - | Only requests a gateway made on somebody's behalf, e.g. `--via EF61VQ4R` |
-| `--since` | `<SINCE>` | - | Only entries from this far back, e.g. `1h`, `30d` |
-| `--until` | `<UNTIL>` | - | Only entries before this far back, e.g. `1h` |
-| `--from` | `<FROM>` | - | Only entries at or after this instant: `2026-07-01` (midnight UTC) or `2026-07-01T08:00:00Z` |
-| `--to` | `<TO>` | - | Only entries before this instant, which is excluded, so consecutive periods neither overlap nor leave a gap: `--from 2026-07-01 --to 2026-10-01` is the third quarter |
-| `--class` | `<CLASS>` | - | Only these classes, comma-separated: `change`, `denied`, `access`, `routine`. An auditor usually wants `change,denied` |
-| `--result` | `<RESULT>` | - | Only `allowed`, or only `denied` |
-| `--limit` | `<LIMIT>` | `200` | For `table` and `json`: most recent first, capped by the coordinator. `csv` and `jsonl` ignore it and export every matching entry |
-| `--config` | `<CONFIG>` | `$DIFFUSE_COORDINATOR_CONFIG` | Configuration file. Its `[admin]` section says where to connect |
-| `--endpoint` | `<ENDPOINT>` | `$DIFFUSE_COORDINATOR_ENDPOINT` | Coordinator endpoint, e.g. https://coordinator.internal:7443 |
-| `--output` | `table` \| `json` \| `jsonl` \| `csv` | `table` | `table` or `json` for a screen of rows; `csv` or `jsonl` for a file: the whole matching period, one line per entry, oldest first |
-| `--ca-cert` | `<CA_CERT>` | `$DIFFUSE_CA_CERT` | The deployment CA certificate (PEM) |
-| `--cert` | `<CERT>` | `$DIFFUSE_CERT` | This process's certificate chain (PEM) |
-| `--key` | `<KEY>` | `$DIFFUSE_KEY` | This process's private key (PEM) |
+| `--actor <ACTOR>` | text | - | Substring of the actor, e.g. `ops-laptop` or `apikey/EF61VQ4R` |
+| `--user <USER>` | text | - | Alias for `--actor`, for the spelling the north star uses |
+| `--action <ACTION>` | text | - | Exact action, e.g. `model.serve` or `node.enrol` |
+| `--object <OBJECT>` | text | - | Substring of the object acted on |
+| `--via <VIA>` | text | - | Only requests a gateway made on somebody's behalf, e.g. `--via EF61VQ4R` |
+| `--since <SINCE>` | text | - | Only entries from this far back, e.g. `1h`, `30d` |
+| `--until <UNTIL>` | text | - | Only entries before this far back, e.g. `1h` |
+| `--from <FROM>` | text | - | Only entries at or after this instant: `2026-07-01` (midnight UTC) or `2026-07-01T08:00:00Z` |
+| `--to <TO>` | text | - | Only entries before this instant, which is excluded, so consecutive periods neither overlap nor leave a gap: `--from 2026-07-01 --to 2026-10-01` is the third quarter |
+| `--class <CLASS>` | text | - | Only these classes, comma-separated: `change`, `denied`, `access`, `routine`. An auditor usually wants `change,denied` |
+| `--result <RESULT>` | text | - | Only `allowed`, or only `denied` |
+| `--limit <LIMIT>` | integer | `200` | For `table` and `json`: most recent first, capped by the coordinator. `csv` and `jsonl` ignore it and export every matching entry |
+| `--output <OUTPUT>` | one of `table`, `json`, `jsonl`, `csv` | `table` | `table` or `json` for a screen of rows; `csv` or `jsonl` for a file: the whole matching period, one line per entry, oldest first |
+
+And the [connection options](index.md#connection-options).
 
 ## Notes
 

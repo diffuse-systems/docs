@@ -12,10 +12,10 @@ diffuse-coordinator firewall close-enrolment [OPTIONS]
 
 ## Options
 
-| flag | value | default | description |
+| flag | type | default | description |
 |---|---|---|---|
-| `--config` | `<CONFIG>` | - | The coordinator's configuration, read for the ports. Defaults to the packaged one |
-| `--api-env` | `<API_ENV>` | `/etc/diffuse/api.env` | The api's environment file, read for its port |
+| `--config <CONFIG>` | path | - | The coordinator's configuration, read for the ports. Defaults to the packaged one |
+| `--api-env <API_ENV>` | path | `/etc/diffuse/api.env` | The api's environment file, read for its port |
 
 ## Notes
 
@@ -28,7 +28,7 @@ $ sudo diffuse-coordinator firewall close-enrolment
 ```
 
 ```
-Enrolment (7444) is closed in ufw. New machines cannot join. What ran:
+  Enrolment (7444) is closed in ufw. New machines cannot join. What ran:
 
     sudo ufw delete allow from 192.168.178.0/24 to any port 7444 proto tcp
 
